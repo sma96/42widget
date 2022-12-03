@@ -47,7 +47,7 @@ class DataManager {
         }
         print("\(year!) : \(month!) : \(day!)")
         var components = URLComponents(string: "https://api.24hoursarenotenough.42seoul.kr/v1/tag-log/perday")!
-        components.queryItems = [URLQueryItem(name: "year", value: "\(year!)"), URLQueryItem(name: "month", value: "\(11)"), URLQueryItem(name: "day", value: "\(day!)")]
+        components.queryItems = [URLQueryItem(name: "year", value: "\(year!)"), URLQueryItem(name: "month", value: "\(month!)"), URLQueryItem(name: "day", value: "\(day!)")]
         
         var request = URLRequest(url: components.url!)
         request.httpMethod = "GET"
@@ -95,7 +95,7 @@ class DataManager {
         }
         print("\(year!) : \(month!) : \(day!)")
         var components = URLComponents(string: "https://api.24hoursarenotenough.42seoul.kr/v1/tag-log/permonth")!
-        components.queryItems = [URLQueryItem(name: "year", value: "\(year!)"), URLQueryItem(name: "month", value: "\(11)")]
+        components.queryItems = [URLQueryItem(name: "year", value: "\(year!)"), URLQueryItem(name: "month", value: "\(month!)")]
         
         var request = URLRequest(url: components.url!)
         request.httpMethod = "GET"

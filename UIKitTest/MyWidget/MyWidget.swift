@@ -29,8 +29,8 @@ struct Provider: TimelineProvider {
         let policyDate = Calendar.current.date(byAdding: .minute, value: 2, to: Date())!
         var timelingPolicy: TimelineReloadPolicy = .never
         
-        var fetchedDay: Days?
-        var fetchedMonth: Days?
+        var fetchedDay: Days? = nil
+        var fetchedMonth: Days? = nil
         
         guard DataManager.shared.token != nil else {
             let entry = SimpleEntry(date: entryDate, day: fetchedDay, month: fetchedMonth, hasToken: false)
@@ -40,7 +40,7 @@ struct Provider: TimelineProvider {
             completion(timeline)
             return
         }
-        
+
         let group = DispatchGroup()
         
         group.enter()
@@ -55,17 +55,16 @@ struct Provider: TimelineProvider {
             }
             group.leave()
         }
-        if fetchedDay != nil {
-            group.enter()
-            DataManager.shared.fetchMonthData { result in
-                switch result {
-                case .success(let month):
-                    fetchedMonth = month
-                default:
-                    break
-                }
-                group.leave()
+        group.enter()
+        DataManager.shared.fetchMonthData { result in
+            switch result {
+            case .success(let month):
+                fetchedMonth = month
+                timelingPolicy = .after(policyDate)
+            default:
+                break
             }
+            group.leave()
         }
         group.notify(queue: .main) {
             let entry = SimpleEntry(date: entryDate, day: fetchedDay, month: fetchedMonth, hasToken: true)
@@ -120,13 +119,13 @@ struct DataView: View {
         var dayText = ""
         var monthText = ""
         
-        if times[0] == 0 {
+        if times[1] == 0 {
             dayText = "0 : 0 : 0"
         } else {
             dayText = "\(times[1] / 3600) : \(times[1] % 3600 / 60) : \(times[1] % 3600 % 60)"
         }
         
-        if times[1] == 0 {
+        if times[0] == 0 {
             monthText = "0 : 0 : 0"
         } else {
             monthText = "\(times[0] / 3600) : \(times[0] % 3600 / 60) : \(times[0] % 3600 % 60)"

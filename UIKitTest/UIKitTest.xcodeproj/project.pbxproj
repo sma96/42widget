@@ -116,11 +116,11 @@
 		CD2A687E293A140800D234E5 /* MyWidget */ = {
 			isa = PBXGroup;
 			children = (
+				CD2A687F293A140800D234E5 /* MyWidget.swift */,
 				CDCA0C26293B7B0E0095D1FC /* Utils */,
 				CDCA0C25293B7AF80095D1FC /* Data */,
 				CDCA0C24293B7AE90095D1FC /* TrackRun */,
 				CDCA0C23293B7AD90095D1FC /* ScaleView */,
-				CD2A687F293A140800D234E5 /* MyWidget.swift */,
 				CD2A6881293A140A00D234E5 /* Assets.xcassets */,
 				CD2A6883293A140A00D234E5 /* Info.plist */,
 			);
