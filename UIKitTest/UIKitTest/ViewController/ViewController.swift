@@ -117,7 +117,7 @@ class ViewController: UIViewController {
     //MARK: - widget을 refresh 해준다.
     @objc func  widgetRefresh() {
         print("refresh")
-        WidgetCenter.shared.reloadTimelines(ofKind: DataShelter.shared.kind)
+        WidgetCenter.shared.reloadAllTimelines()
     }
     
     //MARK: - 데이터 fetch하고 실행되는 함수, fetch해온 데이터로 하루 누적시간과, 한달 누적 시간을 계산하여 label에 표시해준다.

@@ -39,12 +39,15 @@ class DataManager {
         dateComponents.day
     }
     
+    var index: Int = 1
+    
     func fetchDayData(completion: @escaping (Result<Days, FetchError>) -> Void) {
         guard let token = self.token else {
             print("no token")
             completion(.failure(.NoToken))
             return
         }
+        index += 1
         print("\(year!) : \(month!) : \(day!)")
         var components = URLComponents(string: "https://api.24hoursarenotenough.42seoul.kr/v1/tag-log/perday")!
         components.queryItems = [URLQueryItem(name: "year", value: "\(year!)"), URLQueryItem(name: "month", value: "\(month!)"), URLQueryItem(name: "day", value: "\(day!)")]

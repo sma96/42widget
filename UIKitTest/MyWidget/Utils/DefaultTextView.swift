@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct DefaultTextView: View {
+    
+    var monthTime: Int
+    
     var body: some View {
         VStack(spacing: 5) {
-            Text("59h")
+            Text("\(monthTime)h")
                 .font(.system(size: 15, weight: .bold))
                 .lineLimit(1)
                 .minimumScaleFactor(0.1)
@@ -32,6 +35,6 @@ struct DefaultTextView: View {
 
 struct DefaultTextView_Previews: PreviewProvider {
     static var previews: some View {
-        DefaultTextView()
+        DefaultTextView(monthTime: 50)
     }
 }

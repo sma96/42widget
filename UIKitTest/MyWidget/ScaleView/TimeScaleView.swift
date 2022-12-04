@@ -9,7 +9,26 @@ import SwiftUI
 
 struct TimeScaleView: View {
     
-    @State var percentage: Double
+    let monthData: Days?
+    let dayData: Days?
+    
+    var monthTime: Int {
+        let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
+        
+        return times[0] / 3600
+    }
+    
+    var dayTime: Int {
+        let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
+        
+        return times[1]
+    }
+
+    var percentage: Double {
+        let percentage = (Double(monthTime) / TimeManager.shared.maxTime)
+        
+        return percentage >= 1 ? 1 : percentage
+    }
     
     var body: some View {
         GeometryReader { geo in
@@ -32,7 +51,7 @@ struct TimeScaleView: View {
                     .rotationEffect(Angle(degrees: 150))
                 Circle()
                     .frame(width: 3.5)
-                Text("13 / 80")
+                Text("\(monthTime)/\(80)")
                     .font(.system(size: 12, weight: .bold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.1)
@@ -68,7 +87,7 @@ struct TimeScaleView_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
             Color.indigo
-            TimeScaleView(percentage: 0.5)
+            TimeScaleView(monthData: nil, dayData: nil)
                 .frame(width: 70, height: 70)
         }
     }

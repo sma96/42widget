@@ -26,13 +26,14 @@ struct Provider: TimelineProvider {
         
         let currentDate = Date()
         let entryDate = Calendar.current.date(byAdding: .hour, value: 0, to: currentDate)!
-        let policyDate = Calendar.current.date(byAdding: .minute, value: 2, to: Date())!
+        let policyDate = Calendar.current.date(byAdding: .minute, value: 5, to: currentDate)!
         var timelingPolicy: TimelineReloadPolicy = .never
         
         var fetchedDay: Days? = nil
         var fetchedMonth: Days? = nil
         
         guard DataManager.shared.token != nil else {
+            print("no token")
             let entry = SimpleEntry(date: entryDate, day: fetchedDay, month: fetchedMonth, hasToken: false)
             entries.append(entry)
             
@@ -49,7 +50,7 @@ struct Provider: TimelineProvider {
             case .success(let day):
                 fetchedDay = day
                 timelingPolicy = .after(policyDate)
-                print("success")
+                print("success day")
             default:
                 break
             }
@@ -61,6 +62,7 @@ struct Provider: TimelineProvider {
             case .success(let month):
                 fetchedMonth = month
                 timelingPolicy = .after(policyDate)
+                print("success month")
             default:
                 break
             }
@@ -69,7 +71,7 @@ struct Provider: TimelineProvider {
         group.notify(queue: .main) {
             let entry = SimpleEntry(date: entryDate, day: fetchedDay, month: fetchedMonth, hasToken: true)
             entries.append(entry)
-            
+
             let timeline = Timeline(entries: entries, policy: timelingPolicy)
             completion(timeline)
         }
@@ -84,222 +86,108 @@ struct SimpleEntry: TimelineEntry {
     let hasToken: Bool
 }
 
-
-struct DataView: View {
-    let dayData: Days?
-    let monthData: Days?
-    
-    
-    var dayTime: Int = 0
-    var monthTime: Int = 0
+struct TrackRunWidgetEntryView : View {
+    var entry: Provider.Entry
+    @Environment(\.widgetFamily) var widgetFamily
     
     var body: some View {
-        
-        makeText()
-    }
-    
-    private func getAllTime() -> [Int] {
-        guard let day = self.dayData, let month = self.monthData else {
-//            print("error")
-            return [0, 0]
-        }
-        var dayTime = 0
-        for log in day.inOutLogs {
-            dayTime += log.durationSecond
-        }
-        
-        var monthTime = 0
-        for log in month.inOutLogs {
-            monthTime += log.durationSecond
-        }
-        return [monthTime, dayTime]
-    }
-    private func makeText() -> some View {
-        let times = self.getAllTime()
-        var dayText = ""
-        var monthText = ""
-        
-        if times[1] == 0 {
-            dayText = "0 : 0 : 0"
-        } else {
-            dayText = "\(times[1] / 3600) : \(times[1] % 3600 / 60) : \(times[1] % 3600 % 60)"
-        }
-        
-        if times[0] == 0 {
-            monthText = "0 : 0 : 0"
-        } else {
-            monthText = "\(times[0] / 3600) : \(times[0] % 3600 / 60) : \(times[0] % 3600 % 60)"
-        }
-        
-        return VStack(spacing: 5) {
-            Text(dayText)
-            Text(monthText)
+        switch widgetFamily {
+        case .accessoryCircular:
+            TrackRunView(monthData: entry.month, dayData: entry.day)
+        default:
+            Text("hello world")
         }
     }
 }
 
-struct MyWidgetEntryView : View {
+struct TimeScaleWidgetEntryView : View {
     var entry: Provider.Entry
-    
-    @State var myData: Days?
-    @State var text = "hello sma"
-    
+    @Environment(\.widgetFamily) var widgetFamily
+
     var body: some View {
-        if entry.hasToken {
-            DataView(dayData: entry.day, monthData: entry.month)
-        } else {
-            Text("no token")
+        switch widgetFamily {
+        case .accessoryCircular:
+            TimeScaleView(monthData: entry.month, dayData: entry.day)
+        default:
+            Text("hello world")
         }
+    }
+}
+
+struct CircularRingWidgetEntryView : View {
+    @Environment(\.widgetFamily) var widgetFamily
+    var entry: Provider.Entry
+
+    var body: some View {
+        switch widgetFamily {
+        case .accessoryCircular:
+            CircularRingView(monthData: entry.month, dayData: entry.day)
+        default:
+            Text("hello")
+        }
+    }
+}
+
+struct TrackRunWidget: Widget {
+    let kind: String = "TrackRunWidget"
+
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: Provider()) { entry in
+            TrackRunWidgetEntryView(entry: entry)
+        }
+        .configurationDisplayName("My TrackRunWidget")
+        .description("This is an example widget.")
+        .supportedFamilies([.accessoryCircular])
+    }
+}
+
+////@main
+struct TimeScaleWidget: Widget {
+    let kind: String = "TimeScaleWidget"
+
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: Provider()) { entry in
+            TimeScaleWidgetEntryView(entry: entry)
+        }
+        .configurationDisplayName("My TimeScaleWidget")
+        .description("This is an example widget.")
+        .supportedFamilies([.accessoryCircular])
+    }
+}
+
+//@main
+struct CircularRingWidget: Widget {
+    let kind: String = "My CircularRingWidget"
+    
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: Provider()) { entry in
+            CircularRingWidgetEntryView(entry: entry)
+        }
+        .configurationDisplayName("My Widget")
+        .description("This is an example widget.")
+        .supportedFamilies([.accessoryCircular])
     }
 }
 
 @main
-struct MyWidget: Widget {
-    let kind: String = "MyWidget"
-
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            MyWidgetEntryView(entry: entry)
-        }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+struct MyWidgets: WidgetBundle {
+    var body: some Widget {
+        // ...(다른 위젯들)
+        CircularRingWidget()
+        TimeScaleWidget()
+        TrackRunWidget()
     }
 }
 
 struct MyWidget_Previews: PreviewProvider {
     static var previews: some View {
-        MyWidgetEntryView(entry: SimpleEntry(date: Date(), day: nil, month: nil, hasToken: true))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+        Group {
+            TimeScaleWidgetEntryView(entry: SimpleEntry(date: Date(), day: nil, month: nil, hasToken: true))
+                .previewContext(WidgetPreviewContext(family: .accessoryCircular))
+            CircularRingWidgetEntryView(entry: SimpleEntry(date: Date(), day: nil, month: nil, hasToken: true))
+                .previewContext(WidgetPreviewContext(family: .accessoryCircular))
+            TrackRunWidgetEntryView(entry: SimpleEntry(date: Date(), day: nil, month: nil, hasToken: true))
+                .previewContext(WidgetPreviewContext(family: .accessoryCircular))
+        }
     }
 }
-
-//struct SimpleEntry: TimelineEntry {
-//    let date: Date
-//}
-//
-//struct widgetEntryView : View {
-//    @Environment(\.widgetFamily) var widgetFamily
-//    
-//    var entry: Provider.Entry
-//    
-//    var body: some View {
-//        switch widgetFamily{
-//        case .accessoryCircular:
-//            CircularWidgetView()
-//        default:
-//            Text("hello")
-//        }
-//    }
-//}
-//
-//struct CircularWidgetView: View {
-//    
-//    @State var percentage: Double = 0.2
-//    
-//    var body: some View {
-//        ZStack {
-//            RingView(percentage: percentage)
-//                .rotationEffect(Angle(degrees: 150))
-//            DefaultTextView()
-//        }
-//    }
-//}
-//
-//struct TrackRunWidgetEntryView : View {
-//    var entry: Provider.Entry
-//    @Environment(\.widgetFamily) var widgetFamily
-//    
-//    @State var percentage: Double = 0.5
-//    
-//    var body: some View {
-//        switch widgetFamily {
-//        case .accessoryCircular:
-//            TrackRunView(percentage: percentage)
-//        default:
-//            Text("hello world")
-//        }
-//    }
-//}
-//
-//struct TrackRunWidget: Widget {
-//    let kind: String = "TrackRunWidget"
-//
-//    var body: some WidgetConfiguration {
-//        StaticConfiguration(kind: kind, provider: Provider()) { entry in
-//            TrackRunWidgetEntryView(entry: entry)
-//        }
-//        .configurationDisplayName("My TrackRunWidget")
-//        .description("This is an example widget.")
-//        .supportedFamilies([.accessoryCircular])
-//    }
-//}
-//
-//struct TimeScaleWidgetEntryView : View {
-//    var entry: Provider.Entry
-//    @Environment(\.widgetFamily) var widgetFamily
-//    
-//    @State var percentage: Double = 0.2
-//    
-//    var body: some View {
-//        switch widgetFamily {
-//        case .accessoryCircular:
-//            TimeScaleView(percentage: percentage)
-//        default:
-//            Text("hello world")
-//        }
-//    }
-//}
-//
-//
-//
-////@main
-//struct TimeScaleWidget: Widget {
-//    let kind: String = "TimeScaleWidget"
-//
-//    var body: some WidgetConfiguration {
-//        StaticConfiguration(kind: kind, provider: Provider()) { entry in
-//            TimeScaleWidgetEntryView(entry: entry)
-//        }
-//        .configurationDisplayName("My TimeScaleWidget")
-//        .description("This is an example widget.")
-//        .supportedFamilies([.accessoryCircular])
-//    }
-//}
-//
-////@main
-//struct widget: Widget {
-//    let kind: String = "widget"
-//
-//    var body: some WidgetConfiguration {
-//        StaticConfiguration(kind: kind, provider: Provider()) { entry in
-//            widgetEntryView(entry: entry)
-//        }
-//        .configurationDisplayName("My Widget")
-//        .description("This is an example widget.")
-//        .supportedFamilies([.accessoryCircular])
-//    }
-//}
-//
-//@main
-//struct MyWidget: WidgetBundle {
-//    var body: some Widget {
-//        // ...(다른 위젯들)
-//        TimeScaleWidget()
-//        widget()
-//        TrackRunWidget()
-//    }
-//}
-//
-//
-//struct widget_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Group {
-//            TimeScaleWidgetEntryView(entry: SimpleEntry(date: Date()))
-//                .previewContext(WidgetPreviewContext(family: .accessoryCircular))
-//            widgetEntryView(entry: SimpleEntry(date: Date()))
-//                .previewContext(WidgetPreviewContext(family: .accessoryCircular))
-//            TrackRunWidgetEntryView(entry: SimpleEntry(date: Date()))
-//                .previewContext(WidgetPreviewContext(family: .accessoryCircular))
-//        }
-//    }
-//}

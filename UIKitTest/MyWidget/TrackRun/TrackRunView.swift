@@ -10,7 +10,29 @@ import SwiftUI
 import WidgetKit
 
 struct TrackRunView: View {
-    var percentage: Double
+    
+    let monthData: Days?
+    let dayData: Days?
+    
+    var monthTime: Int {
+        let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
+        
+        return times[0] / 3600
+    }
+    
+    var dayTime: Int {
+        let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
+        
+        return times[1]
+    }
+
+    var percentage: Double {
+        let percentage = (Double(monthTime) / TimeManager.shared.maxTime)
+        
+        return percentage >= 1 ? 1 : percentage
+    }
+    
+    
     
     var body: some View {
         GeometryReader { geo in
@@ -24,7 +46,7 @@ struct TrackRunView: View {
                     .frame(width: 13, height: 17)
                     .offset(x: percentage >= 1 ? 0 : getPoint(width: geo.size.width - 30, height: geo.size.height - 30).x, y: percentage >= 1 ? 0 : getPoint(width: geo.size.width - 30, height: geo.size.height - 30).y)
                     .rotationEffect(Angle(degrees: percentage >= 1 ? 0 : 150))
-                Text("80h")
+                Text("\(monthTime)")
                     .font(.system(size: 14, weight: .bold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.1)
@@ -59,7 +81,7 @@ struct TrackRunView_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
             Color.indigo
-            TrackRunView(percentage: 0)
+            TrackRunView(monthData: nil, dayData: nil)
                 .frame(width: 75)
         }
     }

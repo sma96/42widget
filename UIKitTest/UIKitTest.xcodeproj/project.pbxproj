@@ -16,6 +16,10 @@
 		CD2A688C293A32FC00D234E5 /* DataShelter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFB24452939EFC0005BAFA2 /* DataShelter.swift */; };
 		CD2A688E293B036C00D234E5 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2A688D293B036C00D234E5 /* DataManager.swift */; };
 		CD2A688F293B03B500D234E5 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2A688D293B036C00D234E5 /* DataManager.swift */; };
+		CD367F12293CBB8100F8094D /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD367F11293CBB8100F8094D /* TimeManager.swift */; };
+		CD367F13293CBB8100F8094D /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD367F11293CBB8100F8094D /* TimeManager.swift */; };
+		CD367F1C293CC64D00F8094D /* CircularRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD367F1B293CC64D00F8094D /* CircularRingView.swift */; };
+		CD367F1D293CC64D00F8094D /* CircularRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD367F1B293CC64D00F8094D /* CircularRingView.swift */; };
 		CD5560CC28A2949E00846C8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5560CB28A2949E00846C8B /* AppDelegate.swift */; };
 		CD5560CE28A2949E00846C8B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5560CD28A2949E00846C8B /* SceneDelegate.swift */; };
 		CD5560D028A2949E00846C8B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5560CF28A2949E00846C8B /* ViewController.swift */; };
@@ -74,6 +78,8 @@
 		CD2A6883293A140A00D234E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CD2A688B293A141D00D234E5 /* MyWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyWidgetExtension.entitlements; sourceTree = "<group>"; };
 		CD2A688D293B036C00D234E5 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		CD367F11293CBB8100F8094D /* TimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeManager.swift; sourceTree = "<group>"; };
+		CD367F1B293CC64D00F8094D /* CircularRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularRingView.swift; sourceTree = "<group>"; };
 		CD5560C828A2949D00846C8B /* UIKitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD5560CB28A2949E00846C8B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CD5560CD28A2949E00846C8B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -116,15 +122,58 @@
 		CD2A687E293A140800D234E5 /* MyWidget */ = {
 			isa = PBXGroup;
 			children = (
+				CD2A6883293A140A00D234E5 /* Info.plist */,
 				CD2A687F293A140800D234E5 /* MyWidget.swift */,
+				CD367F1A293CC62400F8094D /* CircularRing */,
 				CDCA0C26293B7B0E0095D1FC /* Utils */,
 				CDCA0C25293B7AF80095D1FC /* Data */,
 				CDCA0C24293B7AE90095D1FC /* TrackRun */,
 				CDCA0C23293B7AD90095D1FC /* ScaleView */,
-				CD2A6881293A140A00D234E5 /* Assets.xcassets */,
-				CD2A6883293A140A00D234E5 /* Info.plist */,
+				CD367F18293CBF7200F8094D /* src */,
 			);
 			path = MyWidget;
+			sourceTree = "<group>";
+		};
+		CD367F14293CBEEF00F8094D /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				CDFB24452939EFC0005BAFA2 /* DataShelter.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		CD367F15293CBEF600F8094D /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CD5560CF28A2949E00846C8B /* ViewController.swift */,
+				CD2A6872293A0CA000D234E5 /* WebViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CD367F16293CBF1000F8094D /* src */ = {
+			isa = PBXGroup;
+			children = (
+				CD5560D628A2949F00846C8B /* LaunchScreen.storyboard */,
+				CD5560D428A2949F00846C8B /* Assets.xcassets */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		CD367F18293CBF7200F8094D /* src */ = {
+			isa = PBXGroup;
+			children = (
+				CD2A6881293A140A00D234E5 /* Assets.xcassets */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		CD367F1A293CC62400F8094D /* CircularRing */ = {
+			isa = PBXGroup;
+			children = (
+				CD367F1B293CC64D00F8094D /* CircularRingView.swift */,
+			);
+			path = CircularRing;
 			sourceTree = "<group>";
 		};
 		CD5560BF28A2949D00846C8B = {
@@ -151,14 +200,12 @@
 			isa = PBXGroup;
 			children = (
 				CD2A6874293A137C00D234E5 /* UIKitTest.entitlements */,
+				CD5560D928A2949F00846C8B /* Info.plist */,
 				CD5560CB28A2949E00846C8B /* AppDelegate.swift */,
 				CD5560CD28A2949E00846C8B /* SceneDelegate.swift */,
-				CD5560CF28A2949E00846C8B /* ViewController.swift */,
-				CD5560D428A2949F00846C8B /* Assets.xcassets */,
-				CD5560D628A2949F00846C8B /* LaunchScreen.storyboard */,
-				CD5560D928A2949F00846C8B /* Info.plist */,
-				CD2A6872293A0CA000D234E5 /* WebViewController.swift */,
-				CDFB24452939EFC0005BAFA2 /* DataShelter.swift */,
+				CD367F15293CBEF600F8094D /* ViewController */,
+				CD367F14293CBEEF00F8094D /* Data */,
+				CD367F16293CBF1000F8094D /* src */,
 			);
 			path = UIKitTest;
 			sourceTree = "<group>";
@@ -185,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				CD2A688D293B036C00D234E5 /* DataManager.swift */,
+				CD367F11293CBB8100F8094D /* TimeManager.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -311,10 +359,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				CDCA0C22293B7AA80095D1FC /* RingView.swift in Sources */,
+				CD367F1D293CC64D00F8094D /* CircularRingView.swift in Sources */,
 				CDCA0C10293B7A030095D1FC /* TimeScaleView.swift in Sources */,
 				CD2A6880293A140800D234E5 /* MyWidget.swift in Sources */,
 				CD2A688F293B03B500D234E5 /* DataManager.swift in Sources */,
 				CDCA0C1F293B7A930095D1FC /* DefaultTextView.swift in Sources */,
+				CD367F13293CBB8100F8094D /* TimeManager.swift in Sources */,
 				CDCA0C13293B7A270095D1FC /* ScaleRingView.swift in Sources */,
 				CDCA0C16293B7A3D0095D1FC /* TrackRunView.swift in Sources */,
 				CDCA0C1C293B7A810095D1FC /* RotateImageView.swift in Sources */,
@@ -329,6 +379,7 @@
 			files = (
 				CDCA0C18293B7A600095D1FC /* TrackRunRingView.swift in Sources */,
 				CD5560D028A2949E00846C8B /* ViewController.swift in Sources */,
+				CD367F12293CBB8100F8094D /* TimeManager.swift in Sources */,
 				CDCA0C12293B7A270095D1FC /* ScaleRingView.swift in Sources */,
 				CDCA0C0F293B7A030095D1FC /* TimeScaleView.swift in Sources */,
 				CD2A688E293B036C00D234E5 /* DataManager.swift in Sources */,
@@ -336,6 +387,7 @@
 				CDCA0C21293B7AA80095D1FC /* RingView.swift in Sources */,
 				CD5560CC28A2949E00846C8B /* AppDelegate.swift in Sources */,
 				CD2A6873293A0CA000D234E5 /* WebViewController.swift in Sources */,
+				CD367F1C293CC64D00F8094D /* CircularRingView.swift in Sources */,
 				CDCA0C15293B7A3D0095D1FC /* TrackRunView.swift in Sources */,
 				CDCA0C1E293B7A930095D1FC /* DefaultTextView.swift in Sources */,
 				CD5560CE28A2949E00846C8B /* SceneDelegate.swift in Sources */,
