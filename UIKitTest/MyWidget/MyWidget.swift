@@ -23,7 +23,6 @@ struct Provider: TimelineProvider {
         print("called")
         print(Date())
         
-        
         let currentDate = Date()
         let entryDate = Calendar.current.date(byAdding: .hour, value: 0, to: currentDate)!
         let policyDate = Calendar.current.date(byAdding: .minute, value: 5, to: currentDate)!
@@ -147,7 +146,8 @@ struct TimeScaleWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            TimeScaleWidgetEntryView(entry: entry)
+            print("Timescale")
+            return TimeScaleWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("My TimeScaleWidget")
         .description("This is an example widget.")
@@ -161,7 +161,8 @@ struct CircularRingWidget: Widget {
     
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            CircularRingWidgetEntryView(entry: entry)
+            print("Circular")
+            return CircularRingWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("My Widget")
         .description("This is an example widget.")

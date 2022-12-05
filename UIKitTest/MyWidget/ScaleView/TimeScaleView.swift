@@ -14,14 +14,13 @@ struct TimeScaleView: View {
     
     var monthTime: Int {
         let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
-        
         return times[0] / 3600
     }
     
     var dayTime: Int {
         let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
         
-        return times[1]
+        return times[1] / 3600
     }
 
     var percentage: Double {
@@ -51,7 +50,7 @@ struct TimeScaleView: View {
                     .rotationEffect(Angle(degrees: 150))
                 Circle()
                     .frame(width: 3.5)
-                Text("\(monthTime)/\(80)")
+                Text("\(monthTime) / \(80)")
                     .font(.system(size: 12, weight: .bold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.1)

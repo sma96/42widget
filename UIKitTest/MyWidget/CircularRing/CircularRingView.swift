@@ -20,13 +20,12 @@ struct CircularRingView: View {
     
     var dayTime: Int {
         let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
-        
-        return times[1]
+
+        return times[1] / 3600
     }
     
     var percentage: Double {
-        let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
-        let percentage = (Double(times[0] / 3600) / TimeManager.shared.maxTime)
+        let percentage = (Double(monthTime) / TimeManager.shared.maxTime)
         
         return percentage >= 1 ? 1 : percentage
     }

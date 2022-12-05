@@ -23,7 +23,7 @@ struct TrackRunView: View {
     var dayTime: Int {
         let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
         
-        return times[1]
+        return times[1] / 3600
     }
 
     var percentage: Double {

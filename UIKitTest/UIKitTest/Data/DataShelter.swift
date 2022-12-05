@@ -57,7 +57,7 @@ class DataShelter {
     func fetchDayData(completion: @escaping (Result<Days, FetchError>) -> Void) {
         
         var components = URLComponents(string: "https://api.24hoursarenotenough.42seoul.kr/v1/tag-log/perday")!
-        components.queryItems = [URLQueryItem(name: "year", value: "2022"), URLQueryItem(name: "month", value: "12"), URLQueryItem(name: "day", value: "1")]
+        components.queryItems = [URLQueryItem(name: "year", value: "\(year!)"), URLQueryItem(name: "month", value: "\(month!)"), URLQueryItem(name: "day", value: "\(day!)")]
         
         var request = URLRequest(url: components.url!)
         request.httpMethod = "GET"
