@@ -21,7 +21,70 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("hello world")
+        setup()
+        layout()
+        
+        if hasToken() {
+            button.isHidden = true
+            buttonLabel.isHidden = true
+            fetchData()
+        }
+    }
+    
+    
+    private func fetchData() {
+        let group = DispatchGroup()
+    
+        group.enter()
+        DataShelter.shared.fetchAllData {
+            group.leave()
+        }
+        group.notify(queue: .main) {
+            self.fetchedData()
+        }
+    }
+    
+    private func hasToken() -> Bool {
+        if let token = UserDefaults(suiteName: DataShelter.shared.groupName)?.object(forKey: DataShelter.shared.keyName) as? String {
+            DataShelter.shared.token = token
+            print("you've been have token")
+            return true
+        }
+        return false
+    }
+    
+    private func layout() {
+        stackView.addArrangedSubview(buttonLabel)
+        stackView.addArrangedSubview(button)
+        
+        view.addSubview(stackView)
+        view.addSubview(dayTimeLabel)
+        view.addSubview(monthTimeLabel)
+        view.addSubview(refreshButton)
+        
+        NSLayoutConstraint.activate([
+            dayTimeLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            dayTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            dayTimeLabel.widthAnchor.constraint(equalToConstant: 200),
+            dayTimeLabel.heightAnchor.constraint(equalToConstant: 90),
+            
+            monthTimeLabel.topAnchor.constraint(equalToSystemSpacingBelow: dayTimeLabel.bottomAnchor, multiplier: 1),
+            monthTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            monthTimeLabel.widthAnchor.constraint(equalToConstant: 200),
+            monthTimeLabel.heightAnchor.constraint(equalToConstant: 90),
+            
+            button.widthAnchor.constraint(equalToConstant: 30),
+            button.heightAnchor.constraint(equalToConstant: 30),
+            
+            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            refreshButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            refreshButton.topAnchor.constraint(equalToSystemSpacingBelow: monthTimeLabel.bottomAnchor, multiplier: 3)
+        ])
+    }
+    
+    private func setup() {
         dayTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         dayTimeLabel.clipsToBounds = true
         dayTimeLabel.layer.cornerRadius = 15
@@ -68,41 +131,10 @@ class ViewController: UIViewController {
         stackView.spacing = 8
     
         registerNotifications()
-        
-        stackView.addArrangedSubview(buttonLabel)
-        stackView.addArrangedSubview(button)
-        
-        view.addSubview(stackView)
-        view.addSubview(dayTimeLabel)
-        view.addSubview(monthTimeLabel)
-        view.addSubview(refreshButton)
-        
-        NSLayoutConstraint.activate([
-            dayTimeLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            dayTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            dayTimeLabel.widthAnchor.constraint(equalToConstant: 200),
-            dayTimeLabel.heightAnchor.constraint(equalToConstant: 90),
-            
-            monthTimeLabel.topAnchor.constraint(equalToSystemSpacingBelow: dayTimeLabel.bottomAnchor, multiplier: 1),
-            monthTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            monthTimeLabel.widthAnchor.constraint(equalToConstant: 200),
-            monthTimeLabel.heightAnchor.constraint(equalToConstant: 90),
-            
-            button.widthAnchor.constraint(equalToConstant: 30),
-            button.heightAnchor.constraint(equalToConstant: 30),
-            
-            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
-            refreshButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            refreshButton.topAnchor.constraint(equalToSystemSpacingBelow: monthTimeLabel.bottomAnchor, multiplier: 3)
-        ])
     }
-    
     //MARK: - webView를 열어 24hane으로부터 access token을 받아옵니다. 토큰은 shared container UserDefault에 저장해줍니다. 그래야 widget extentsion과 데이터 공유가 가능합니다.
     @objc func getDataButtonTapped() {
-        if let token = UserDefaults(suiteName: DataShelter.shared.groupName)?.object(forKey: "accessToken") {
-            print("you've been have token \(token)")
+        if hasToken() {
             return
         }
         print("button Tapped")
@@ -122,9 +154,11 @@ class ViewController: UIViewController {
     
     //MARK: - 데이터 fetch하고 실행되는 함수, fetch해온 데이터로 하루 누적시간과, 한달 누적 시간을 계산하여 label에 표시해준다.
     @objc func fetchedData() {
-        self.stackView.removeFromSuperview()
+//        self.stackView.removeFromSuperview()
         dayTimeLabel.isHidden = false
         monthTimeLabel.isHidden = false
+        button.isHidden = true
+        buttonLabel.isHidden = true
 //        button.isHidden = true
         var dayAllTime = 0
         if let data = DataShelter.shared.dayData?.inOutLogs {

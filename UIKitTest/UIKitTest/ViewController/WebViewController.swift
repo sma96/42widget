@@ -101,45 +101,7 @@ extension WebViewController: WKUIDelegate, WKNavigationDelegate {
                         DataShelter.shared.token = cookie.value
                         
                         group.enter()
-                        DataShelter.shared.fetchDayData { result in
-                            switch result {
-                            case .success(let day):
-                                print(day)
-                                DataShelter.shared.dayData = day
-                            case .failure(.DecodeError):
-                                print("디코딩 에러입니다.")
-                            case .failure(.ServerError):
-                                print("서버관리자에게 문의하세요")
-                            case .failure(.NoAccessError):
-                                print("접근 권한이 없습니다.")
-                            case .failure(.FetchError):
-                                print("데이터를 가져오지 못했습니다.")
-                            case .failure(.QuaryError):
-                                print("쿼리를 정확하게 입력해주세요")
-                            default:
-                                break
-                            }
-                            group.leave()
-                        }
-                        group.enter()
-                        DataShelter.shared.fetchMonthData { result in
-                            switch result {
-                            case .success(let month):
-                                print(month)
-                                DataShelter.shared.monthData = month
-                            case .failure(.DecodeError):
-                                print("디코딩 에러입니다.")
-                            case .failure(.ServerError):
-                                print("서버관리자에게 문의하세요")
-                            case .failure(.NoAccessError):
-                                print("접근 권한이 없습니다.")
-                            case .failure(.FetchError):
-                                print("데이터를 가져오지 못했습니다.")
-                            case .failure(.QuaryError):
-                                print("쿼리를 정확하게 입력해주세요")
-                            default:
-                                break
-                            }
+                        DataShelter.shared.fetchAllData {
                             group.leave()
                         }
                         

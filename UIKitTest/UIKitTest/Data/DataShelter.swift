@@ -15,19 +15,25 @@ extension Notification.Name {
 
 class DataShelter {
     static let shared: DataShelter = DataShelter()
+
     
-    var token: String? {
-        didSet {
-            if token != nil {
-                UserDefaults(suiteName: groupName)?.set(self.token!, forKey: keyName)
-                print("didset!!!!!")
-            }
-        }
-    }
-    
+//    didSet {
+//        if token != nil {
+//            UserDefaults(suiteName: groupName)?.set(self.token!, forKey: keyName)
+//            print("didset!!!!!")
+//        }
+//    }
     let groupName: String = "group.me.ma.seokwoo.UIKitTest"
     let keyName: String = "accessToken"
     let kind: String = "MyWidget"
+    
+    var token: String? {
+        didSet {
+            if let fetchedToken = self.token {
+                UserDefaults(suiteName: groupName)?.set(fetchedToken, forKey: keyName)
+            }
+        }
+    }
     
     var dayData: Days?
     var monthData: Days?
@@ -137,6 +143,56 @@ class DataShelter {
             }
         }
         task.resume()
+    }
+    
+    func fetchAllData(completion: @escaping () -> Void) {
+        let group = DispatchGroup()
+    
+        group.enter()
+        fetchDayData { result in
+            switch result {
+            case .success(let day):
+                print(day)
+                self.dayData = day
+            case .failure(.DecodeError):
+                print("디코딩 에러입니다.")
+            case .failure(.ServerError):
+                print("서버관리자에게 문의하세요")
+            case .failure(.NoAccessError):
+                print("접근 권한이 없습니다.")
+            case .failure(.FetchError):
+                print("데이터를 가져오지 못했습니다.")
+            case .failure(.QuaryError):
+                print("쿼리를 정확하게 입력해주세요")
+            default:
+                break
+            }
+            group.leave()
+        }
+        group.enter()
+        fetchMonthData { result in
+            switch result {
+            case .success(let month):
+                print(month)
+                self.monthData = month
+            case .failure(.DecodeError):
+                print("디코딩 에러입니다.")
+            case .failure(.ServerError):
+                print("서버관리자에게 문의하세요")
+            case .failure(.NoAccessError):
+                print("접근 권한이 없습니다.")
+            case .failure(.FetchError):
+                print("데이터를 가져오지 못했습니다.")
+            case .failure(.QuaryError):
+                print("쿼리를 정확하게 입력해주세요")
+            default:
+                break
+            }
+            group.leave()
+        }
+        group.notify(queue: .main) {
+            completion()
+        }
     }
 }
 
