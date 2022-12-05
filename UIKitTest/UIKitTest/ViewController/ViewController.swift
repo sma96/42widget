@@ -27,20 +27,9 @@ class ViewController: UIViewController {
         if hasToken() {
             button.isHidden = true
             buttonLabel.isHidden = true
-            fetchData()
-        }
-    }
-    
-    
-    private func fetchData() {
-        let group = DispatchGroup()
-    
-        group.enter()
-        DataShelter.shared.fetchAllData {
-            group.leave()
-        }
-        group.notify(queue: .main) {
-            self.fetchedData()
+            DataShelter.shared.fetchAllData {
+                self.fetchedData()
+            }
         }
     }
     
