@@ -23,6 +23,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        print("foreground")
+        NotificationCenter.default.post(name: .checkExpires, object: nil)
+    }
 
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        print("background")
+    }
 }
 

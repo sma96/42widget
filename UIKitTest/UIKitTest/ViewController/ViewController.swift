@@ -20,15 +20,36 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setup()
         layout()
-        
+
+        checkExpiresDate()
         if hasToken() {
+            print("hasToken")
             button.isHidden = true
             buttonLabel.isHidden = true
             DataShelter.shared.fetchAllData {
                 self.fetchedData()
+            }
+        } else {
+            dayTimeLabel.isHidden = true
+            monthTimeLabel.isHidden = true
+            button.isHidden = false
+            buttonLabel.isHidden = false
+        }
+    }
+    
+    
+    @objc private func checkExpiresDate() {
+        if let expiresDate = UserDefaults(suiteName: DataShelter.shared.groupName)?.object(forKey: DataShelter.shared.dateKeyName) as? Date {
+            DataShelter.shared.expiresDate = expiresDate
+            let currentDate = Date.now
+            if currentDate >= expiresDate {
+                print("expires")
+                UserDefaults(suiteName: DataShelter.shared.groupName)?.set(nil, forKey: DataShelter.shared.keyName)
+            } else {
+                print("valid")
+                print(expiresDate)
             }
         }
     }
@@ -97,7 +118,7 @@ class ViewController: UIViewController {
         monthTimeLabel.isHidden = true
         
         buttonLabel.translatesAutoresizingMaskIntoConstraints = false
-        buttonLabel.text = "내 데이터 가져오기"
+        buttonLabel.text = "로그인해서 데이터 가져오기"
         buttonLabel.textColor = .blue
         buttonLabel.textAlignment = .center
         buttonLabel.font = .preferredFont(forTextStyle: .subheadline)
@@ -113,6 +134,9 @@ class ViewController: UIViewController {
 
         refreshButton.translatesAutoresizingMaskIntoConstraints = false
         refreshButton.backgroundColor = .systemBlue
+        refreshButton.layer.cornerRadius = 5
+        refreshButton.setTitle(" Widget ", for: .normal)
+        refreshButton.tintColor = .white
         refreshButton.addTarget(self, action: #selector(widgetRefresh), for: .primaryActionTriggered)
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -123,12 +147,9 @@ class ViewController: UIViewController {
     }
     //MARK: - webView를 열어 24hane으로부터 access token을 받아옵니다. 토큰은 shared container UserDefault에 저장해줍니다. 그래야 widget extentsion과 데이터 공유가 가능합니다.
     @objc func getDataButtonTapped() {
-        if hasToken() {
-            return
-        }
         print("button Tapped")
         button.backgroundColor = .systemGray
-        button.isEnabled = false
+//        button.isEnabled = false
         buttonLabel.textColor = .systemGray
         let vc = WebViewController()
         vc.modalPresentationStyle = .fullScreen
@@ -148,7 +169,7 @@ class ViewController: UIViewController {
         monthTimeLabel.isHidden = false
         button.isHidden = true
         buttonLabel.isHidden = true
-//        button.isHidden = true
+        button.isHidden = true
         var dayAllTime = 0
         if let data = DataShelter.shared.dayData?.inOutLogs {
             for day in data {
@@ -174,5 +195,6 @@ class ViewController: UIViewController {
     //MARK: - 데이터를 fetch해왔다는 알림을 받고 지정한 함수(fetchedData)를 실행시켜준다.
     func registerNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(fetchedData), name: .fetched, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(checkExpiresDate), name: .checkExpires, object: nil)
     }
 }

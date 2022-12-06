@@ -95,21 +95,56 @@ extension WebViewController: WKUIDelegate, WKNavigationDelegate {
             print("before complete")
             webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
                 for cookie in cookies {
+                    print(cookie)
                     if cookie.name == DataShelter.shared.keyName {
-                        let group = DispatchGroup()
+
                         
+                        print(cookie.expiresDate)
+                        DataShelter.shared.expiresDate = cookie.expiresDate
                         DataShelter.shared.token = cookie.value
                         
-                        group.enter()
-                        DataShelter.shared.fetchAllData {
-                            group.leave()
-                        }
-                        
-                        group.notify(queue: .main) {
+                        DataShelter.shared.fetchAllData { [weak self] in
+                            guard let self = self else {
+                                return
+                            }
+//                            let websiteDataTypes = NSSet(array: [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache, WKWebsiteDataTypeCookies])
+//                            let date = NSDate(timeIntervalSince1970: 0)
+//
+//                            WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes as! Set, modifiedSince: date as Date, completionHandler:{ })
+//                            print("delete cache data")
+//
+//                            WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), completionHandler: {
+//                                (records) -> Void in
+//                                for record in records{
+//                                    WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+//                                    print("delete cache data")
+//                                }
+//                            })
+//
                             self.webView.removeFromSuperview()
                             NotificationCenter.default.post(name: .fetched, object: nil)
                             self.dismiss(animated: true)
                         }
+                        
+//                        group.notify(queue: .main) {
+//                            let websiteDataTypes = NSSet(array: [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache, WKWebsiteDataTypeCookies])
+//                            let date = NSDate(timeIntervalSince1970: 0)
+//
+//                            WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes as! Set, modifiedSince: date as Date, completionHandler:{ })
+//                            print("delete cache data")
+//
+//                            WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), completionHandler: {
+//                                (records) -> Void in
+//                                for record in records{
+//                                    WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+//                                    print("delete cache data")
+//                                }
+//                            })
+//
+//                            self.webView.removeFromSuperview()
+//                            NotificationCenter.default.post(name: .fetched, object: nil)
+//                            self.dismiss(animated: true)
+//                        }
                     }
                 }
             }

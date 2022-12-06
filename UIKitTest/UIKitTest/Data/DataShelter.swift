@@ -10,7 +10,7 @@ import UIKit
 
 extension Notification.Name {
     static let fetched = Notification.Name("fetchData")
-    
+    static let checkExpires = Notification.Name("checkExpires")
 }
 
 class DataShelter {
@@ -25,8 +25,17 @@ class DataShelter {
 //    }
     let groupName: String = "group.me.ma.seokwoo.UIKitTest"
     let keyName: String = "accessToken"
+    let dateKeyName: String = "expiresDate"
     let kind: String = "MyWidget"
     
+    var expiresDate: Date? {
+        didSet {
+            if let fetchedExpiresDate = self.expiresDate {
+                UserDefaults(suiteName: groupName)?.set(fetchedExpiresDate, forKey: dateKeyName)
+            }
+        }
+    }
+
     var token: String? {
         didSet {
             if let fetchedToken = self.token {
