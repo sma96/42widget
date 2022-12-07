@@ -16,52 +16,25 @@ class ViewController: UIViewController {
     let dayTimeLabel = UILabel()
     let monthTimeLabel = UILabel()
     
+//    var currentDate = Date.now
     let stackView = UIStackView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         layout()
+        // expiresdate test timer
+//        let timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
+//            self.currentDate = Date.now + 20
+//            print("timer")
+//        }
+        registerNotifications()
+        getUserDefaultData()
+        checkAllData()
+    }
+}
 
-        checkExpiresDate()
-        if hasToken() {
-            print("hasToken")
-            button.isHidden = true
-            buttonLabel.isHidden = true
-            DataShelter.shared.fetchAllData {
-                self.fetchedData()
-            }
-        } else {
-            dayTimeLabel.isHidden = true
-            monthTimeLabel.isHidden = true
-            button.isHidden = false
-            buttonLabel.isHidden = false
-        }
-    }
-    
-    
-    @objc private func checkExpiresDate() {
-        if let expiresDate = UserDefaults(suiteName: DataShelter.shared.groupName)?.object(forKey: DataShelter.shared.dateKeyName) as? Date {
-            DataShelter.shared.expiresDate = expiresDate
-            let currentDate = Date.now
-            if currentDate >= expiresDate {
-                print("expires")
-                UserDefaults(suiteName: DataShelter.shared.groupName)?.set(nil, forKey: DataShelter.shared.keyName)
-            } else {
-                print("valid")
-                print(expiresDate)
-            }
-        }
-    }
-    
-    private func hasToken() -> Bool {
-        if let token = UserDefaults(suiteName: DataShelter.shared.groupName)?.object(forKey: DataShelter.shared.keyName) as? String {
-            DataShelter.shared.token = token
-            print("you've been have token")
-            return true
-        }
-        return false
-    }
+extension ViewController {
     
     private func layout() {
         stackView.addArrangedSubview(buttonLabel)
@@ -142,10 +115,68 @@ class ViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.spacing = 8
-    
-        registerNotifications()
     }
+    
+    
+    private func getUserDefaultData() {
+        if let expiresDate = UserDefaults(suiteName: DataShelter.shared.groupName)?.object(forKey: DataShelter.shared.dateKeyName) as? Date {
+            DataShelter.shared.expiresDate = expiresDate
+        }
+        if let token = UserDefaults(suiteName: DataShelter.shared.groupName)?.object(forKey: DataShelter.shared.keyName) as? String {
+            DataShelter.shared.token = token
+        }
+    }
+    
+    private func checkExpiresDate() {
+        if let expiresDate = DataShelter.shared.expiresDate {
+            let currentDate = Date.now
+            if currentDate >= expiresDate {
+                print("expires")
+                UserDefaults(suiteName: DataShelter.shared.groupName)?.set(nil, forKey: DataShelter.shared.keyName)
+                DataShelter.shared.token = nil
+            } else {
+                print("valid")
+                print(expiresDate)
+            }
+        }
+    }
+    
+    private func hasToken() -> Bool {
+        if let token = DataShelter.shared.token {
+            print("you've been have token")
+            return true
+        }
+        return false
+    }
+    
+    @objc private func checkAllData() {
+        checkExpiresDate()
+        if hasToken() {
+            print("hasToken")
+            button.isHidden = true
+            buttonLabel.isHidden = true
+            DataShelter.shared.fetchAllData {
+                self.fetchedData()
+            }
+        } else {
+            dayTimeLabel.isHidden = true
+            monthTimeLabel.isHidden = true
+            button.isHidden = false
+            buttonLabel.isHidden = false
+        }
+    }
+    
+    //MARK: - 데이터를 fetch해왔다는 알림을 받고 지정한 함수(fetchedData)를 실행시켜준다.
+    func registerNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(fetchedData), name: .fetched, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(checkAllData), name: .checkExpires, object: nil)
+    }
+}
+
+extension ViewController {
+    
     //MARK: - webView를 열어 24hane으로부터 access token을 받아옵니다. 토큰은 shared container UserDefault에 저장해줍니다. 그래야 widget extentsion과 데이터 공유가 가능합니다.
+    
     @objc func getDataButtonTapped() {
         print("button Tapped")
         button.backgroundColor = .systemGray
@@ -164,13 +195,13 @@ class ViewController: UIViewController {
     
     //MARK: - 데이터 fetch하고 실행되는 함수, fetch해온 데이터로 하루 누적시간과, 한달 누적 시간을 계산하여 label에 표시해준다.
     @objc func fetchedData() {
-//        self.stackView.removeFromSuperview()
         dayTimeLabel.isHidden = false
         monthTimeLabel.isHidden = false
         button.isHidden = true
         buttonLabel.isHidden = true
-        button.isHidden = true
+
         var dayAllTime = 0
+        
         if let data = DataShelter.shared.dayData?.inOutLogs {
             for day in data {
                 dayAllTime += day.durationSecond
@@ -179,6 +210,7 @@ class ViewController: UIViewController {
         } else {
             dayTimeLabel.text = "D 0 : 0 : 0"
         }
+        
         var monthAllTime = 0
         
         if let data = DataShelter.shared.monthData?.inOutLogs {
@@ -189,12 +221,7 @@ class ViewController: UIViewController {
         } else {
             monthTimeLabel.text = "M 0 : 0 : 0"
         }
-//        WidgetCenter.shared.reloadAllTimelines()
-    }
-    
-    //MARK: - 데이터를 fetch해왔다는 알림을 받고 지정한 함수(fetchedData)를 실행시켜준다.
-    func registerNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(fetchedData), name: .fetched, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(checkExpiresDate), name: .checkExpires, object: nil)
+        
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
