@@ -142,7 +142,7 @@ extension ViewController {
     }
     
     private func hasToken() -> Bool {
-        if let token = DataShelter.shared.token {
+        if DataShelter.shared.token != nil {
             print("you've been have token")
             return true
         }

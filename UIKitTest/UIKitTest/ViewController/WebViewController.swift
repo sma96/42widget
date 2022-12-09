@@ -98,7 +98,6 @@ extension WebViewController: WKUIDelegate, WKNavigationDelegate {
                     print(cookie)
                     if cookie.name == DataShelter.shared.keyName {
 
-                        
                         print(cookie.expiresDate)
                         DataShelter.shared.expiresDate = cookie.expiresDate
                         DataShelter.shared.token = cookie.value
@@ -120,7 +119,7 @@ extension WebViewController: WKUIDelegate, WKNavigationDelegate {
 //                                    print("delete cache data")
 //                                }
 //                            })
-//
+////
                             self.webView.removeFromSuperview()
                             NotificationCenter.default.post(name: .fetched, object: nil)
                             self.dismiss(animated: true)
