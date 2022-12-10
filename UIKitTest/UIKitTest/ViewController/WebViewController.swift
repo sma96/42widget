@@ -11,7 +11,12 @@ import WebKit
 
 class WebViewController: UIViewController {
     
+    deinit {
+        print("@@@@@@@@@@@@@@@@@@@@webviewcontroller deinit@@@@@@@@@@@@@@@@@@@")
+    }
+    var firstFlag: Int = 0
     var webView: WKWebView!
+    let circleLoader = CircleLoaderView()
     
     //    override func loadView() {
     //        super.loadView()
@@ -29,17 +34,22 @@ class WebViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        style()
+        layout()
         
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         var components = URLComponents(string: "https://api.24hoursarenotenough.42seoul.kr/user/login/42")!
         let query = [URLQueryItem(name: "redirect", value: "https://24hoursarenotenough.42seoul.kr/")]
         components.queryItems = query
         
         let request = URLRequest(url: components.url!)
 
-        style()
-        layout()
+        circleLoader.start()
         webView.load(request)
-        
     }
 }
 
@@ -59,6 +69,7 @@ extension WebViewController {
     func layout() {
         
         view.addSubview(webView)
+        view.addSubview(circleLoader)
         
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -86,6 +97,10 @@ extension WebViewController: WKUIDelegate, WKNavigationDelegate {
     
     //MARK: - webView가 페이지 로드를 완료하면 호출되는 함수입니다. 만약 url이 "https://24hoursarenotenough.42seoul.kr/" 이라면 쿠키에 저장되어 있는 토큰을 가져와 누적 시간을 fetch 해옵니다.
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        if firstFlag == 0 {
+            circleLoader.stop()
+            firstFlag = 1
+        }
         print("didFinish navigatio                                          \(webView.url) ")
         guard let url = webView.url?.absoluteString else {
             print("webView url error")

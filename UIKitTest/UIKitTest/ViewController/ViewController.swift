@@ -10,11 +10,13 @@ import WidgetKit
 
 class ViewController: UIViewController {
     
+    var complete = false
     let button = UIButton()
     let refreshButton = UIButton()
     let buttonLabel = UILabel()
     let dayTimeLabel = UILabel()
     let monthTimeLabel = UILabel()
+    let circleLoader = CircleLoaderView()
     
 //    var currentDate = Date.now
     let stackView = UIStackView()
@@ -36,6 +38,51 @@ class ViewController: UIViewController {
 
 extension ViewController {
     
+    private func removeShimmerAnimation() {
+        self.dayTimeLabel.layer.removeAllAnimations()
+        self.dayTimeLabel.layer.sublayers?.removeAll()
+        self.monthTimeLabel.layer.removeAllAnimations()
+        self.monthTimeLabel.layer.sublayers?.removeAll()
+    }
+    private func shimmerAnimation() {
+        let animation = CABasicAnimation(keyPath: "locations")
+        
+        animation.fromValue = [-10.0, -5.0, 0.0]
+        animation.toValue = [0.0, 5.0, 10.0]
+        animation.duration = 2
+        animation.repeatCount = .infinity
+        animation.beginTime = 0.0
+        
+        let animation2 = CABasicAnimation(keyPath: "locations")
+        
+        animation2.fromValue = [-10.0, -5.0, 0.0]
+        animation2.toValue = [0.0, 5.0, 10.0]
+        animation2.duration = 2
+        animation2.repeatCount = .infinity
+        animation2.beginTime = 1.35
+
+        let layer = CAGradientLayer()
+        layer.frame = dayTimeLabel.bounds
+        layer.cornerRadius = 15
+        layer.colors = [UIColor.systemGray6.cgColor, UIColor.white.cgColor, UIColor.systemGray6.cgColor]
+        layer.locations = [0.0, 0.1, 0.2]
+        layer.startPoint = CGPoint(x: 0, y: 0)
+        layer.endPoint = CGPoint(x: 1, y: 1)
+        layer.add(animation, forKey: "locations")
+        
+        let layer2 = CAGradientLayer()
+        layer2.frame = dayTimeLabel.bounds
+        layer2.cornerRadius = 15
+        layer2.colors = [UIColor.systemGray6.cgColor, UIColor.white.cgColor, UIColor.systemGray6.cgColor]
+        layer2.locations = [0.0, 0.1, 0.2]
+        layer2.startPoint = CGPoint(x: 0, y: 0)
+        layer2.endPoint = CGPoint(x: 1, y: 1)
+        layer2.add(animation2, forKey: "locations")
+        
+        dayTimeLabel.layer.addSublayer(layer)
+        monthTimeLabel.layer.addSublayer(layer2)
+        
+    }
     private func layout() {
         stackView.addArrangedSubview(buttonLabel)
         stackView.addArrangedSubview(button)
@@ -44,6 +91,7 @@ extension ViewController {
         view.addSubview(dayTimeLabel)
         view.addSubview(monthTimeLabel)
         view.addSubview(refreshButton)
+        view.addSubview(circleLoader)
         
         NSLayoutConstraint.activate([
             dayTimeLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -155,8 +203,34 @@ extension ViewController {
             print("hasToken")
             button.isHidden = true
             buttonLabel.isHidden = true
+            circleLoader.start()
             DataShelter.shared.fetchAllData {
                 self.fetchedData()
+                self.circleLoader.stop()
+                self.complete = true
+            }
+        } else {
+            dayTimeLabel.isHidden = true
+            monthTimeLabel.isHidden = true
+            button.isHidden = false
+            buttonLabel.isHidden = false
+        }
+    }
+    
+    @objc private func checkAllDataWhenInForeground() {
+        if complete == false {
+            return
+        }
+        print("+++++++++++++++++=checkAlldata+++++++++++")
+        checkExpiresDate()
+        if hasToken() {
+            print("hasToken")
+            button.isHidden = true
+            buttonLabel.isHidden = true
+            shimmerAnimation()
+            DataShelter.shared.fetchAllData {
+                self.fetchedData()
+                self.removeShimmerAnimation()
             }
         } else {
             dayTimeLabel.isHidden = true
@@ -169,7 +243,7 @@ extension ViewController {
     //MARK: - 데이터를 fetch해왔다는 알림을 받고 지정한 함수(fetchedData)를 실행시켜준다.
     func registerNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(fetchedData), name: .fetched, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(checkAllData), name: .checkExpires, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(checkAllDataWhenInForeground), name: .checkExpires, object: nil)
     }
 }
 

@@ -27,6 +27,7 @@
 		CD5560D028A2949E00846C8B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5560CF28A2949E00846C8B /* ViewController.swift */; };
 		CD5560D528A2949F00846C8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD5560D428A2949F00846C8B /* Assets.xcassets */; };
 		CD5560D828A2949F00846C8B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD5560D628A2949F00846C8B /* LaunchScreen.storyboard */; };
+		CD8E46E129446D1D00BC7312 /* CircleLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8E46E029446D1D00BC7312 /* CircleLoaderView.swift */; };
 		CDCA0C0F293B7A030095D1FC /* TimeScaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCA0C0E293B7A030095D1FC /* TimeScaleView.swift */; };
 		CDCA0C10293B7A030095D1FC /* TimeScaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCA0C0E293B7A030095D1FC /* TimeScaleView.swift */; };
 		CDCA0C12293B7A270095D1FC /* ScaleRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCA0C11293B7A270095D1FC /* ScaleRingView.swift */; };
@@ -94,6 +95,7 @@
 		CD5560D428A2949F00846C8B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CD5560D728A2949F00846C8B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CD5560D928A2949F00846C8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CD8E46E029446D1D00BC7312 /* CircleLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleLoaderView.swift; sourceTree = "<group>"; };
 		CDCA0C0E293B7A030095D1FC /* TimeScaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeScaleView.swift; sourceTree = "<group>"; };
 		CDCA0C11293B7A270095D1FC /* ScaleRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleRingView.swift; sourceTree = "<group>"; };
 		CDCA0C14293B7A3D0095D1FC /* TrackRunView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRunView.swift; sourceTree = "<group>"; };
@@ -137,7 +139,6 @@
 				322E9F765137829DC7B5A3A2 /* Pods-UIKitTest.debug.xcconfig */,
 				26B5E208935F74842919F61C /* Pods-UIKitTest.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -228,9 +229,18 @@
 				CD5560CD28A2949E00846C8B /* SceneDelegate.swift */,
 				CD367F15293CBEF600F8094D /* ViewController */,
 				CD367F14293CBEEF00F8094D /* Data */,
+				CD8E46DF29446D0400BC7312 /* View */,
 				CD367F16293CBF1000F8094D /* src */,
 			);
 			path = UIKitTest;
+			sourceTree = "<group>";
+		};
+		CD8E46DF29446D0400BC7312 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CD8E46E029446D1D00BC7312 /* CircleLoaderView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		CDCA0C23293B7AD90095D1FC /* ScaleView */ = {
@@ -474,6 +484,7 @@
 				CD367F12293CBB8100F8094D /* TimeManager.swift in Sources */,
 				CDCA0C12293B7A270095D1FC /* ScaleRingView.swift in Sources */,
 				CDCA0C0F293B7A030095D1FC /* TimeScaleView.swift in Sources */,
+				CD8E46E129446D1D00BC7312 /* CircleLoaderView.swift in Sources */,
 				CD2A688E293B036C00D234E5 /* DataManager.swift in Sources */,
 				CDFB24462939EFC0005BAFA2 /* DataShelter.swift in Sources */,
 				CDCA0C21293B7AA80095D1FC /* RingView.swift in Sources */,
