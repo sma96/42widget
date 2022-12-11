@@ -14,9 +14,8 @@ class ViewController: UIViewController {
     let button = UIButton()
     let refreshButton = UIButton()
     let buttonLabel = UILabel()
-    let dayTimeLabel = UILabel()
-    let monthTimeLabel = UILabel()
     let circleLoader = CircleLoaderView()
+    let timeLabel = TimeLabelView()
     
 //    var currentDate = Date.now
     let stackView = UIStackView()
@@ -38,72 +37,17 @@ class ViewController: UIViewController {
 
 extension ViewController {
     
-    private func removeShimmerAnimation() {
-        self.dayTimeLabel.layer.removeAllAnimations()
-        self.dayTimeLabel.layer.sublayers?.removeAll()
-        self.monthTimeLabel.layer.removeAllAnimations()
-        self.monthTimeLabel.layer.sublayers?.removeAll()
-    }
-    private func shimmerAnimation() {
-        let animation = CABasicAnimation(keyPath: "locations")
-        
-        animation.fromValue = [-10.0, -5.0, 0.0]
-        animation.toValue = [0.0, 5.0, 10.0]
-        animation.duration = 2
-        animation.repeatCount = .infinity
-        animation.beginTime = 0.0
-        
-        let animation2 = CABasicAnimation(keyPath: "locations")
-        
-        animation2.fromValue = [-10.0, -5.0, 0.0]
-        animation2.toValue = [0.0, 5.0, 10.0]
-        animation2.duration = 2
-        animation2.repeatCount = .infinity
-        animation2.beginTime = 1.35
-
-        let layer = CAGradientLayer()
-        layer.frame = dayTimeLabel.bounds
-        layer.cornerRadius = 15
-        layer.colors = [UIColor.systemGray6.cgColor, UIColor.white.cgColor, UIColor.systemGray6.cgColor]
-        layer.locations = [0.0, 0.1, 0.2]
-        layer.startPoint = CGPoint(x: 0, y: 0)
-        layer.endPoint = CGPoint(x: 1, y: 1)
-        layer.add(animation, forKey: "locations")
-        
-        let layer2 = CAGradientLayer()
-        layer2.frame = dayTimeLabel.bounds
-        layer2.cornerRadius = 15
-        layer2.colors = [UIColor.systemGray6.cgColor, UIColor.white.cgColor, UIColor.systemGray6.cgColor]
-        layer2.locations = [0.0, 0.1, 0.2]
-        layer2.startPoint = CGPoint(x: 0, y: 0)
-        layer2.endPoint = CGPoint(x: 1, y: 1)
-        layer2.add(animation2, forKey: "locations")
-        
-        dayTimeLabel.layer.addSublayer(layer)
-        monthTimeLabel.layer.addSublayer(layer2)
-        
-    }
     private func layout() {
         stackView.addArrangedSubview(buttonLabel)
         stackView.addArrangedSubview(button)
         
         view.addSubview(stackView)
-        view.addSubview(dayTimeLabel)
-        view.addSubview(monthTimeLabel)
+        view.addSubview(timeLabel)
         view.addSubview(refreshButton)
         view.addSubview(circleLoader)
         
         NSLayoutConstraint.activate([
-            dayTimeLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            dayTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            dayTimeLabel.widthAnchor.constraint(equalToConstant: 200),
-            dayTimeLabel.heightAnchor.constraint(equalToConstant: 90),
-            
-            monthTimeLabel.topAnchor.constraint(equalToSystemSpacingBelow: dayTimeLabel.bottomAnchor, multiplier: 1),
-            monthTimeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            monthTimeLabel.widthAnchor.constraint(equalToConstant: 200),
-            monthTimeLabel.heightAnchor.constraint(equalToConstant: 90),
-            
+
             button.widthAnchor.constraint(equalToConstant: 30),
             button.heightAnchor.constraint(equalToConstant: 30),
             
@@ -111,32 +55,18 @@ extension ViewController {
             stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             refreshButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            refreshButton.topAnchor.constraint(equalToSystemSpacingBelow: monthTimeLabel.bottomAnchor, multiplier: 3)
+            refreshButton.topAnchor.constraint(equalToSystemSpacingBelow: timeLabel.bottomAnchor, multiplier: 3),
+            refreshButton.widthAnchor.constraint(equalToConstant: 30),
+            refreshButton.heightAnchor.constraint(equalToConstant: 30),
+//
+            timeLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            timeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
     private func setup() {
-        dayTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        dayTimeLabel.clipsToBounds = true
-        dayTimeLabel.layer.cornerRadius = 15
-        dayTimeLabel.text = ""
-        dayTimeLabel.textColor = .black
-        dayTimeLabel.backgroundColor = .secondarySystemFill
-        dayTimeLabel.textAlignment = .center
-        dayTimeLabel.font = .preferredFont(forTextStyle: .title2)
-        dayTimeLabel.font = .systemFont(ofSize: 25, weight: .bold)
-        dayTimeLabel.isHidden = true
-        
-        monthTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        monthTimeLabel.clipsToBounds = true
-        monthTimeLabel.layer.cornerRadius = 15
-        monthTimeLabel.text = ""
-        monthTimeLabel.textColor = .black
-        monthTimeLabel.backgroundColor = .secondarySystemFill
-        monthTimeLabel.textAlignment = .center
-        monthTimeLabel.font = .preferredFont(forTextStyle: .title2)
-        monthTimeLabel.font = .systemFont(ofSize: 25, weight: .bold)
-        monthTimeLabel.isHidden = true
+
+
         
         buttonLabel.translatesAutoresizingMaskIntoConstraints = false
         buttonLabel.text = "로그인해서 데이터 가져오기"
@@ -145,24 +75,24 @@ extension ViewController {
         buttonLabel.font = .preferredFont(forTextStyle: .subheadline)
         
         button.translatesAutoresizingMaskIntoConstraints = false
-//        button.setTitle("Get Data", for: .normal)
         button.setImage(UIImage(systemName: "arrowshape.right.fill"), for: .normal)
-//        button.imageView
         button.tintColor = .white
         button.layer.cornerRadius = 15
         button.backgroundColor = .blue
         button.addTarget(self, action: #selector(getDataButtonTapped), for: .primaryActionTriggered)
 
         refreshButton.translatesAutoresizingMaskIntoConstraints = false
-        refreshButton.backgroundColor = .systemBlue
-        refreshButton.layer.cornerRadius = 5
-        refreshButton.setTitle(" Widget ", for: .normal)
-        refreshButton.tintColor = .white
+        refreshButton.layer.cornerRadius = 15
+        refreshButton.tintColor = .systemGreen
+        refreshButton.setImage(UIImage(systemName: "arrow.clockwise.circle"), for: .normal)
         refreshButton.addTarget(self, action: #selector(widgetRefresh), for: .primaryActionTriggered)
+        refreshButton.isHidden = true
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.spacing = 8
+        
+        timeLabel.isHidden = true
     }
     
     
@@ -210,8 +140,8 @@ extension ViewController {
                 self.complete = true
             }
         } else {
-            dayTimeLabel.isHidden = true
-            monthTimeLabel.isHidden = true
+            timeLabel.isHidden = true
+            refreshButton.isHidden = true
             button.isHidden = false
             buttonLabel.isHidden = false
         }
@@ -221,20 +151,22 @@ extension ViewController {
         if complete == false {
             return
         }
+        refreshButton.isEnabled = false
         print("+++++++++++++++++=checkAlldata+++++++++++")
         checkExpiresDate()
         if hasToken() {
             print("hasToken")
             button.isHidden = true
             buttonLabel.isHidden = true
-            shimmerAnimation()
+            timeLabel.shimmerAnimation()
             DataShelter.shared.fetchAllData {
                 self.fetchedData()
-                self.removeShimmerAnimation()
+                self.refreshButton.isEnabled = true
+                self.timeLabel.removeShimmerAnimation()
             }
         } else {
-            dayTimeLabel.isHidden = true
-            monthTimeLabel.isHidden = true
+            timeLabel.isHidden = true
+            refreshButton.isHidden = true
             button.isHidden = false
             buttonLabel.isHidden = false
         }
@@ -269,8 +201,8 @@ extension ViewController {
     
     //MARK: - 데이터 fetch하고 실행되는 함수, fetch해온 데이터로 하루 누적시간과, 한달 누적 시간을 계산하여 label에 표시해준다.
     @objc func fetchedData() {
-        dayTimeLabel.isHidden = false
-        monthTimeLabel.isHidden = false
+        timeLabel.isHidden = false
+        refreshButton.isHidden = false
         button.isHidden = true
         buttonLabel.isHidden = true
 
@@ -280,9 +212,9 @@ extension ViewController {
             for day in data {
                 dayAllTime += day.durationSecond
             }
-            dayTimeLabel.text = "D \(dayAllTime / 3600) : \(dayAllTime % 3600 / 60) : \(dayAllTime % 3600 % 60)"
+            timeLabel.dayTimeLabel.text = "D \(dayAllTime / 3600) : \(dayAllTime % 3600 / 60) : \(dayAllTime % 3600 % 60)"
         } else {
-            dayTimeLabel.text = "D 0 : 0 : 0"
+            timeLabel.dayTimeLabel.text = "D 0 : 0 : 0"
         }
         
         var monthAllTime = 0
@@ -291,9 +223,9 @@ extension ViewController {
             for month in data {
                 monthAllTime += month.durationSecond
             }
-            monthTimeLabel.text = "M \(monthAllTime / 3600) : \(monthAllTime % 3600 / 60) : \(monthAllTime % 3600 % 60)"
+            timeLabel.monthTimeLabel.text = "M \(monthAllTime / 3600) : \(monthAllTime % 3600 / 60) : \(monthAllTime % 3600 % 60)"
         } else {
-            monthTimeLabel.text = "M 0 : 0 : 0"
+            timeLabel.monthTimeLabel.text = "M 0 : 0 : 0"
         }
         
         WidgetCenter.shared.reloadAllTimelines()

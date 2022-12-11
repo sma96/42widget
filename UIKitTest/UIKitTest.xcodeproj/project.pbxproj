@@ -28,6 +28,8 @@
 		CD5560D528A2949F00846C8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD5560D428A2949F00846C8B /* Assets.xcassets */; };
 		CD5560D828A2949F00846C8B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD5560D628A2949F00846C8B /* LaunchScreen.storyboard */; };
 		CD8E46E129446D1D00BC7312 /* CircleLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8E46E029446D1D00BC7312 /* CircleLoaderView.swift */; };
+		CD8E46E42945A7C600BC7312 /* TimeLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8E46E32945A7C600BC7312 /* TimeLabelView.swift */; };
+		CD8E46E62945B4D100BC7312 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8E46E52945B4D100BC7312 /* Utils.swift */; };
 		CDCA0C0F293B7A030095D1FC /* TimeScaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCA0C0E293B7A030095D1FC /* TimeScaleView.swift */; };
 		CDCA0C10293B7A030095D1FC /* TimeScaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCA0C0E293B7A030095D1FC /* TimeScaleView.swift */; };
 		CDCA0C12293B7A270095D1FC /* ScaleRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCA0C11293B7A270095D1FC /* ScaleRingView.swift */; };
@@ -96,6 +98,8 @@
 		CD5560D728A2949F00846C8B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CD5560D928A2949F00846C8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CD8E46E029446D1D00BC7312 /* CircleLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleLoaderView.swift; sourceTree = "<group>"; };
+		CD8E46E32945A7C600BC7312 /* TimeLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLabelView.swift; sourceTree = "<group>"; };
+		CD8E46E52945B4D100BC7312 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		CDCA0C0E293B7A030095D1FC /* TimeScaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeScaleView.swift; sourceTree = "<group>"; };
 		CDCA0C11293B7A270095D1FC /* ScaleRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleRingView.swift; sourceTree = "<group>"; };
 		CDCA0C14293B7A3D0095D1FC /* TrackRunView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRunView.swift; sourceTree = "<group>"; };
@@ -231,6 +235,7 @@
 				CD367F14293CBEEF00F8094D /* Data */,
 				CD8E46DF29446D0400BC7312 /* View */,
 				CD367F16293CBF1000F8094D /* src */,
+				CD8E46E52945B4D100BC7312 /* Utils.swift */,
 			);
 			path = UIKitTest;
 			sourceTree = "<group>";
@@ -239,6 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				CD8E46E029446D1D00BC7312 /* CircleLoaderView.swift */,
+				CD8E46E32945A7C600BC7312 /* TimeLabelView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -490,6 +496,8 @@
 				CDCA0C21293B7AA80095D1FC /* RingView.swift in Sources */,
 				CD5560CC28A2949E00846C8B /* AppDelegate.swift in Sources */,
 				CD2A6873293A0CA000D234E5 /* WebViewController.swift in Sources */,
+				CD8E46E62945B4D100BC7312 /* Utils.swift in Sources */,
+				CD8E46E42945A7C600BC7312 /* TimeLabelView.swift in Sources */,
 				CD367F1C293CC64D00F8094D /* CircularRingView.swift in Sources */,
 				CDCA0C15293B7A3D0095D1FC /* TrackRunView.swift in Sources */,
 				CDCA0C1E293B7A930095D1FC /* DefaultTextView.swift in Sources */,
