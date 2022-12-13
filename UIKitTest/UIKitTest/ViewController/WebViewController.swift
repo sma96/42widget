@@ -14,24 +14,12 @@ class WebViewController: UIViewController {
     deinit {
         print("@@@@@@@@@@@@@@@@@@@@webviewcontroller deinit@@@@@@@@@@@@@@@@@@@")
     }
+    
     var firstFlag: Int = 0
     var webView: WKWebView!
     let circleLoader = CircleLoaderView()
     
-    //    override func loadView() {
-    //        super.loadView()
-    //        let webConfiguration = WKWebViewConfiguration()
-    //        webConfiguration.preferences.javaScriptEnabled = true
-    //        webView = WKWebView(frame: .zero, configuration: webConfiguration)
-    //        webView.uiDelegate = self
-    //        webView.navigationDelegate = self
-    //        self.view = self.webView!
-    //    }
-    var text: String = "hello" {
-        willSet {
-            print("didset!!")
-        }
-    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -121,6 +109,8 @@ extension WebViewController: WKUIDelegate, WKNavigationDelegate {
                             guard let self = self else {
                                 return
                             }
+                            
+                            //MARK: - webview 쿠키 및 data 삭제 로직
 //                            let websiteDataTypes = NSSet(array: [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache, WKWebsiteDataTypeCookies])
 //                            let date = NSDate(timeIntervalSince1970: 0)
 //

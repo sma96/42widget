@@ -30,6 +30,7 @@
 		CD8E46E129446D1D00BC7312 /* CircleLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8E46E029446D1D00BC7312 /* CircleLoaderView.swift */; };
 		CD8E46E42945A7C600BC7312 /* TimeLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8E46E32945A7C600BC7312 /* TimeLabelView.swift */; };
 		CD8E46E62945B4D100BC7312 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8E46E52945B4D100BC7312 /* Utils.swift */; };
+		CD97F10E2947705100A22734 /* CustomTabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD97F10D2947705100A22734 /* CustomTabbarView.swift */; };
 		CDCA0C0F293B7A030095D1FC /* TimeScaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCA0C0E293B7A030095D1FC /* TimeScaleView.swift */; };
 		CDCA0C10293B7A030095D1FC /* TimeScaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCA0C0E293B7A030095D1FC /* TimeScaleView.swift */; };
 		CDCA0C12293B7A270095D1FC /* ScaleRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCA0C11293B7A270095D1FC /* ScaleRingView.swift */; };
@@ -100,6 +101,7 @@
 		CD8E46E029446D1D00BC7312 /* CircleLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleLoaderView.swift; sourceTree = "<group>"; };
 		CD8E46E32945A7C600BC7312 /* TimeLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLabelView.swift; sourceTree = "<group>"; };
 		CD8E46E52945B4D100BC7312 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		CD97F10D2947705100A22734 /* CustomTabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabbarView.swift; sourceTree = "<group>"; };
 		CDCA0C0E293B7A030095D1FC /* TimeScaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeScaleView.swift; sourceTree = "<group>"; };
 		CDCA0C11293B7A270095D1FC /* ScaleRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleRingView.swift; sourceTree = "<group>"; };
 		CDCA0C14293B7A3D0095D1FC /* TrackRunView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRunView.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 			children = (
 				CD8E46E029446D1D00BC7312 /* CircleLoaderView.swift */,
 				CD8E46E32945A7C600BC7312 /* TimeLabelView.swift */,
+				CD97F10D2947705100A22734 /* CustomTabbarView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -493,6 +496,7 @@
 				CD8E46E129446D1D00BC7312 /* CircleLoaderView.swift in Sources */,
 				CD2A688E293B036C00D234E5 /* DataManager.swift in Sources */,
 				CDFB24462939EFC0005BAFA2 /* DataShelter.swift in Sources */,
+				CD97F10E2947705100A22734 /* CustomTabbarView.swift in Sources */,
 				CDCA0C21293B7AA80095D1FC /* RingView.swift in Sources */,
 				CD5560CC28A2949E00846C8B /* AppDelegate.swift in Sources */,
 				CD2A6873293A0CA000D234E5 /* WebViewController.swift in Sources */,

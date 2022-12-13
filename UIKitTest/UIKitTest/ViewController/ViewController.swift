@@ -16,9 +16,14 @@ class ViewController: UIViewController {
     let buttonLabel = UILabel()
     let circleLoader = CircleLoaderView()
     let timeLabel = TimeLabelView()
+    let tabBar = CustomTabbarView()
     
 //    var currentDate = Date.now
     let stackView = UIStackView()
+    
+    var tabBarTopAnchor: NSLayoutConstraint?
+    var animator: UIViewPropertyAnimator?
+    var backAnimator: UIViewPropertyAnimator?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +38,30 @@ class ViewController: UIViewController {
         getUserDefaultData()
         checkAllData()
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let path = UIBezierPath(ovalIn: CGRect(origin: CGPoint(x: 25, y: 25), size: CGSize(width: 50, height: 50)))
+        
+        let layer = CAGradientLayer()
+        layer.frame = tabBar.profileImage.bounds
+        layer.cornerRadius = 25
+        layer.colors = [UIColor.blue.cgColor, UIColor.purple.cgColor, UIColor.blue.cgColor]
+        layer.startPoint = CGPoint(x: 0.5, y: 0.5)
+        layer.type = .conic
+        
+        let mask = CAShapeLayer()
+        mask.bounds = layer.bounds
+        mask.path = path.cgPath
+        mask.fillColor = nil
+        mask.lineWidth = 4
+        mask.strokeColor = UIColor.white.cgColor
+        
+        layer.mask = mask
+        
+        tabBar.profileView.layer.addSublayer(layer)
+    }
 }
 
 extension ViewController {
@@ -45,6 +74,7 @@ extension ViewController {
         view.addSubview(timeLabel)
         view.addSubview(refreshButton)
         view.addSubview(circleLoader)
+        view.addSubview(tabBar)
         
         NSLayoutConstraint.activate([
 
@@ -60,8 +90,14 @@ extension ViewController {
             refreshButton.heightAnchor.constraint(equalToConstant: 30),
 //
             timeLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            timeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            timeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            tabBar.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0),
+            tabBar.trailingAnchor.constraint(equalToSystemSpacingAfter: view.trailingAnchor, multiplier: 0)
         ])
+        
+        tabBarTopAnchor = view.bottomAnchor.constraint(equalToSystemSpacingBelow: tabBar.topAnchor, multiplier: 10)
+        tabBarTopAnchor?.isActive = true
     }
     
     private func setup() {
@@ -83,7 +119,7 @@ extension ViewController {
 
         refreshButton.translatesAutoresizingMaskIntoConstraints = false
         refreshButton.layer.cornerRadius = 15
-        refreshButton.tintColor = .systemGreen
+        refreshButton.tintColor = .systemBlue
         refreshButton.setImage(UIImage(systemName: "arrow.clockwise.circle"), for: .normal)
         refreshButton.addTarget(self, action: #selector(widgetRefresh), for: .primaryActionTriggered)
         refreshButton.isHidden = true
@@ -93,8 +129,30 @@ extension ViewController {
         stackView.spacing = 8
         
         timeLabel.isHidden = true
+        
+        tabBar.translatesAutoresizingMaskIntoConstraints = false
+        tabBar.listButton.addTarget(self, action: #selector(listButtonTapped), for: .primaryActionTriggered)
+        tabBar.isHidden = true
     }
     
+    @objc private func listButtonTapped() {
+        if tabBar.isListed {
+            let backAnimator = UIViewPropertyAnimator(duration: 0.45, curve: .easeInOut) {
+                self.tabBarTopAnchor?.constant = 80
+                self.view.layoutIfNeeded()
+            }
+            backAnimator.startAnimation()
+            tabBar.isListed.toggle()
+        } else if !tabBar.isListed {
+            let animator = UIViewPropertyAnimator(duration: 0.45, curve: .easeInOut) {
+                self.tabBarTopAnchor?.constant = 140
+                self.view.layoutIfNeeded()
+            }
+            
+            animator.startAnimation()
+            tabBar.isListed.toggle()
+        }
+    }
     
     private func getUserDefaultData() {
         if let expiresDate = UserDefaults(suiteName: DataShelter.shared.groupName)?.object(forKey: DataShelter.shared.dateKeyName) as? Date {
@@ -159,6 +217,7 @@ extension ViewController {
             button.isHidden = true
             buttonLabel.isHidden = true
             timeLabel.shimmerAnimation()
+//            tabBar.shimmerAnimation2()
             DataShelter.shared.fetchAllData {
                 self.fetchedData()
                 self.refreshButton.isEnabled = true
@@ -167,6 +226,7 @@ extension ViewController {
         } else {
             timeLabel.isHidden = true
             refreshButton.isHidden = true
+            tabBar.isHidden = true
             button.isHidden = false
             buttonLabel.isHidden = false
         }
@@ -177,6 +237,26 @@ extension ViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(fetchedData), name: .fetched, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(checkAllDataWhenInForeground), name: .checkExpires, object: nil)
     }
+    
+    //MARK: - profile image 세팅해주는 함수
+    private func setProfile(completion: @escaping () -> Void) {
+        guard let url = URL(string: DataShelter.shared.imageURL!) else {
+            completion()
+            return
+        }
+        print(DataShelter.shared.imageName)
+        DispatchQueue.global().async {
+            if let data = try? Data(contentsOf: url) {
+                DispatchQueue.main.async {
+                    DataShelter.shared.profileImage = data
+                    self.tabBar.profileImage.image = UIImage(data: data)
+                    completion()
+                }
+            } else {
+                completion()
+            }
+        }
+    }
 }
 
 extension ViewController {
@@ -186,13 +266,17 @@ extension ViewController {
     @objc func getDataButtonTapped() {
         print("button Tapped")
         button.backgroundColor = .systemGray
-//        button.isEnabled = false
+        button.isEnabled = false
         buttonLabel.textColor = .systemGray
         let vc = WebViewController()
         vc.modalPresentationStyle = .fullScreen
         
-        present(vc, animated: true)
+        present(vc, animated: true) {
+            self.button.isHidden.toggle()
+            self.buttonLabel.isHidden.toggle()
+        }
     }
+    
     //MARK: - widget을 refresh 해준다.
     @objc func  widgetRefresh() {
         print("refresh")
@@ -201,11 +285,15 @@ extension ViewController {
     
     //MARK: - 데이터 fetch하고 실행되는 함수, fetch해온 데이터로 하루 누적시간과, 한달 누적 시간을 계산하여 label에 표시해준다.
     @objc func fetchedData() {
-        timeLabel.isHidden = false
-        refreshButton.isHidden = false
-        button.isHidden = true
-        buttonLabel.isHidden = true
 
+        if let profileImage = UserDefaults(suiteName: DataShelter.shared.groupName)?.object(forKey: DataShelter.shared.imageName) as? Data{
+            tabBar.profileImage.image = UIImage(data: profileImage)
+        } else {
+            setProfile {
+                print("setimage")
+            }
+        }
+        tabBar.profileLabel.text = DataShelter.shared.intraID
         var dayAllTime = 0
         
         if let data = DataShelter.shared.dayData?.inOutLogs {
@@ -228,6 +316,12 @@ extension ViewController {
             timeLabel.monthTimeLabel.text = "M 0 : 0 : 0"
         }
         
+        timeLabel.isHidden = false
+        tabBar.isHidden = false
+        refreshButton.isHidden = false
+//        print(button.isHidden)
+//        buttonLabel.isHidden.toggle()
         WidgetCenter.shared.reloadAllTimelines()
     }
+
 }

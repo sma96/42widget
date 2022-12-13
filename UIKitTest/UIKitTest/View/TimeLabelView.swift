@@ -45,7 +45,7 @@ extension TimeLabelView {
         
         dayTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         dayTimeLabel.clipsToBounds = true
-        dayTimeLabel.layer.cornerRadius = 20
+        dayTimeLabel.layer.cornerRadius = 25
         dayTimeLabel.text = ""
         dayTimeLabel.textColor = .black
         dayTimeLabel.backgroundColor = .labelBackgroundColor
@@ -56,7 +56,7 @@ extension TimeLabelView {
         
         monthTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         monthTimeLabel.clipsToBounds = true
-        monthTimeLabel.layer.cornerRadius = 20
+        monthTimeLabel.layer.cornerRadius = 25
         monthTimeLabel.text = "ddd"
         monthTimeLabel.textColor = .black
         monthTimeLabel.backgroundColor = .labelBackgroundColor
@@ -84,9 +84,9 @@ extension TimeLabelView {
             stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
             trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 1),
             dayTimeLabel.widthAnchor.constraint(equalToConstant: 200),
-            dayTimeLabel.heightAnchor.constraint(equalToConstant: 90),
+            dayTimeLabel.heightAnchor.constraint(equalToConstant: 105),
             monthTimeLabel.widthAnchor.constraint(equalToConstant: 200),
-            monthTimeLabel.heightAnchor.constraint(equalToConstant: 90),
+            monthTimeLabel.heightAnchor.constraint(equalToConstant: 105),
         ])
     }
     

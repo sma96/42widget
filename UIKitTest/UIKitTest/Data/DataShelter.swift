@@ -27,6 +27,8 @@ class DataShelter {
     let groupName: String = "group.me.ma.seokwoo.UIKitTest"
     let keyName: String = "accessToken"
     let dateKeyName: String = "expiresDate"
+    let imageName: String = "profileImage"
+    let intraName: String = "intraID"
     let kind: String = "MyWidget"
     
     var expiresDate: Date? {
@@ -41,6 +43,24 @@ class DataShelter {
         didSet {
             if let fetchedToken = self.token {
                 UserDefaults(suiteName: groupName)?.set(fetchedToken, forKey: keyName)
+            }
+        }
+    }
+    
+    var profileImage: Data? {
+        didSet {
+            if let fetchedImage = self.profileImage {
+                UserDefaults(suiteName: groupName)?.set(fetchedImage, forKey: imageName)
+            }
+        }
+    }
+    
+    var imageURL: String?
+    
+    var intraID: String? {
+        didSet {
+            if let fetchedID = self.intraID {
+                UserDefaults(suiteName: groupName)?.set(fetchedID, forKey: intraName)
             }
         }
     }
@@ -114,6 +134,8 @@ class DataShelter {
             case .success(let day):
                 print(day)
                 self.dayData = day
+                self.imageURL = day.profileImage
+                self.intraID = day.login
             case .failure(let error):
                 print(error)
             }
