@@ -20,20 +20,17 @@ struct Provider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         var entries: [SimpleEntry] = []
-        print("called")
-        print(Date())
-        
         let currentDate = Date()
         let entryDate = Calendar.current.date(byAdding: .hour, value: 0, to: currentDate)!
         let policyDate = Calendar.current.date(byAdding: .minute, value: 5, to: currentDate)!
         var timelingPolicy: TimelineReloadPolicy = .never
         
-        var fetchedDay: Days? = nil
-        var fetchedMonth: Days? = nil
+        var fetchedDayData: TimeDataModel? = nil
+        var fetchedMonthData: TimeDataModel? = nil
         
         guard DataManager.shared.token != nil else {
             print("no token")
-            let entry = SimpleEntry(date: entryDate, day: fetchedDay, month: fetchedMonth, hasToken: false)
+            let entry = SimpleEntry(date: entryDate, day: fetchedDayData, month: fetchedMonthData, hasToken: false)
             entries.append(entry)
             
             let timeline = Timeline(entries: entries, policy: timelingPolicy)
@@ -47,7 +44,7 @@ struct Provider: TimelineProvider {
         DataManager.shared.fetchDayData { result in
             switch result {
             case .success(let day):
-                fetchedDay = day
+                fetchedDayData = day
                 timelingPolicy = .after(policyDate)
                 print("success day")
             default:
@@ -59,7 +56,7 @@ struct Provider: TimelineProvider {
         DataManager.shared.fetchMonthData { result in
             switch result {
             case .success(let month):
-                fetchedMonth = month
+                fetchedMonthData = month
                 timelingPolicy = .after(policyDate)
                 print("success month")
             default:
@@ -68,7 +65,7 @@ struct Provider: TimelineProvider {
             group.leave()
         }
         group.notify(queue: .main) {
-            let entry = SimpleEntry(date: entryDate, day: fetchedDay, month: fetchedMonth, hasToken: true)
+            let entry = SimpleEntry(date: entryDate, day: fetchedDayData, month: fetchedMonthData, hasToken: true)
             entries.append(entry)
 
             let timeline = Timeline(entries: entries, policy: timelingPolicy)
@@ -80,8 +77,8 @@ struct Provider: TimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
-    let day: Days?
-    let month: Days?
+    let day: TimeDataModel?
+    let month: TimeDataModel?
     let hasToken: Bool
 }
 
@@ -140,7 +137,6 @@ struct TrackRunWidget: Widget {
     }
 }
 
-////@main
 struct TimeScaleWidget: Widget {
     let kind: String = "TimeScaleWidget"
 
@@ -155,7 +151,6 @@ struct TimeScaleWidget: Widget {
     }
 }
 
-//@main
 struct CircularRingWidget: Widget {
     let kind: String = "My CircularRingWidget"
     

@@ -15,7 +15,6 @@ class CircleLoaderView: UIView {
         
         style()
         layout()
-//        setAnimation()
     }
     
     required init?(coder: NSCoder) {
@@ -37,7 +36,7 @@ extension CircleLoaderView {
         
     }
     
-    func setAnimation() {
+    func setRotateAnimation() {
         let path = UIBezierPath(ovalIn: CGRect(origin: .zero, size: CGSize(width: 50, height: 50)))
         
         let animation = CABasicAnimation(keyPath: "strokeEnd")
@@ -77,22 +76,21 @@ extension CircleLoaderView {
         self.layer.add(rotationAnimation, forKey: "rotate")
     }
     
-    func start() {
+    func startAnimation() {
         guard let superview = self.superview else {
             return
         }
         
-        setAnimation()
+        setRotateAnimation()
         NSLayoutConstraint.activate([
             self.centerXAnchor.constraint(equalTo: superview.centerXAnchor),
             self.centerYAnchor.constraint(equalTo: superview.centerYAnchor)
         ])
     }
     
-    func stop() {
+    func stopAnimation() {
         self.layer.removeAllAnimations()
         self.layer.sublayers?.removeAll()
         print("***********stop circle*********")
-//        self.removeFromSuperview()
     }
 }

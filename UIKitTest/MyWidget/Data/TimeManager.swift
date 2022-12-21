@@ -8,15 +8,13 @@
 import Foundation
 
 class TimeManager {
-    
     static let shared: TimeManager = TimeManager()
     
     let maxTime: Double = 80
     
-    
     private init() {}
     
-    func getAllTime(monthData: Days?, dayData: Days?) -> [Int] {
+    func getAllTime(from monthData: TimeDataModel?, _ dayData: TimeDataModel?) -> [Int] {
         guard let day = dayData, let month = monthData else {
             return [0, 0]
         }

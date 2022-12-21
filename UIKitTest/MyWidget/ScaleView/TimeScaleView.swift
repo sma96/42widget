@@ -8,21 +8,19 @@
 import SwiftUI
 
 struct TimeScaleView: View {
-    
-    let monthData: Days?
-    let dayData: Days?
+    let monthData: TimeDataModel?
+    let dayData: TimeDataModel?
     
     var monthTime: Int {
-        let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
+        let times = TimeManager.shared.getAllTime(from: monthData, dayData)
         return times[0] / 3600
     }
     
     var dayTime: Int {
-        let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
+        let times = TimeManager.shared.getAllTime(from: monthData, dayData)
         
         return times[1] / 3600
     }
-
     var percentage: Double {
         let percentage = (Double(monthTime) / TimeManager.shared.maxTime)
         

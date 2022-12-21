@@ -11,17 +11,17 @@ import WidgetKit
 
 struct TrackRunView: View {
     
-    let monthData: Days?
-    let dayData: Days?
+    let monthData: TimeDataModel?
+    let dayData: TimeDataModel?
     
     var monthTime: Int {
-        let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
+        let times = TimeManager.shared.getAllTime(from: monthData, dayData)
         
         return times[0] / 3600
     }
     
     var dayTime: Int {
-        let times = TimeManager.shared.getAllTime(monthData: monthData, dayData: dayData)
+        let times = TimeManager.shared.getAllTime(from: monthData, dayData)
         
         return times[1] / 3600
     }

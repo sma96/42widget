@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct DefaultTextView: View {
-    
     var monthTime: Int
     
     var body: some View {

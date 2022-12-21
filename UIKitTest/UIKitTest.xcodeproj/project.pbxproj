@@ -29,8 +29,10 @@
 		CD5560D828A2949F00846C8B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD5560D628A2949F00846C8B /* LaunchScreen.storyboard */; };
 		CD8E46E129446D1D00BC7312 /* CircleLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8E46E029446D1D00BC7312 /* CircleLoaderView.swift */; };
 		CD8E46E42945A7C600BC7312 /* TimeLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8E46E32945A7C600BC7312 /* TimeLabelView.swift */; };
-		CD8E46E62945B4D100BC7312 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8E46E52945B4D100BC7312 /* Utils.swift */; };
+		CD8E46E62945B4D100BC7312 /* Color+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8E46E52945B4D100BC7312 /* Color+Utils.swift */; };
 		CD97F10E2947705100A22734 /* CustomTabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD97F10D2947705100A22734 /* CustomTabbarView.swift */; };
+		CD97F110294E22F700A22734 /* TimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD97F10F294E22F700A22734 /* TimeView.swift */; };
+		CD97F1132950C0FA00A22734 /* NotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD97F1122950C0FA00A22734 /* NotificationName.swift */; };
 		CDCA0C0F293B7A030095D1FC /* TimeScaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCA0C0E293B7A030095D1FC /* TimeScaleView.swift */; };
 		CDCA0C10293B7A030095D1FC /* TimeScaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCA0C0E293B7A030095D1FC /* TimeScaleView.swift */; };
 		CDCA0C12293B7A270095D1FC /* ScaleRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCA0C11293B7A270095D1FC /* ScaleRingView.swift */; };
@@ -100,8 +102,10 @@
 		CD5560D928A2949F00846C8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CD8E46E029446D1D00BC7312 /* CircleLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleLoaderView.swift; sourceTree = "<group>"; };
 		CD8E46E32945A7C600BC7312 /* TimeLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLabelView.swift; sourceTree = "<group>"; };
-		CD8E46E52945B4D100BC7312 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		CD8E46E52945B4D100BC7312 /* Color+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Utils.swift"; sourceTree = "<group>"; };
 		CD97F10D2947705100A22734 /* CustomTabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabbarView.swift; sourceTree = "<group>"; };
+		CD97F10F294E22F700A22734 /* TimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeView.swift; sourceTree = "<group>"; };
+		CD97F1122950C0FA00A22734 /* NotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationName.swift; sourceTree = "<group>"; };
 		CDCA0C0E293B7A030095D1FC /* TimeScaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeScaleView.swift; sourceTree = "<group>"; };
 		CDCA0C11293B7A270095D1FC /* ScaleRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleRingView.swift; sourceTree = "<group>"; };
 		CDCA0C14293B7A3D0095D1FC /* TrackRunView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRunView.swift; sourceTree = "<group>"; };
@@ -163,12 +167,12 @@
 			path = MyWidget;
 			sourceTree = "<group>";
 		};
-		CD367F14293CBEEF00F8094D /* Data */ = {
+		CD367F14293CBEEF00F8094D /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				CDFB24452939EFC0005BAFA2 /* DataShelter.swift */,
+				CD97F1112950BE3F00A22734 /* Data */,
 			);
-			path = Data;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		CD367F15293CBEF600F8094D /* ViewController */ = {
@@ -234,10 +238,10 @@
 				CD5560CB28A2949E00846C8B /* AppDelegate.swift */,
 				CD5560CD28A2949E00846C8B /* SceneDelegate.swift */,
 				CD367F15293CBEF600F8094D /* ViewController */,
-				CD367F14293CBEEF00F8094D /* Data */,
+				CD367F14293CBEEF00F8094D /* Model */,
 				CD8E46DF29446D0400BC7312 /* View */,
+				CD97F1142950C1DA00A22734 /* Utils */,
 				CD367F16293CBF1000F8094D /* src */,
-				CD8E46E52945B4D100BC7312 /* Utils.swift */,
 			);
 			path = UIKitTest;
 			sourceTree = "<group>";
@@ -248,8 +252,26 @@
 				CD8E46E029446D1D00BC7312 /* CircleLoaderView.swift */,
 				CD8E46E32945A7C600BC7312 /* TimeLabelView.swift */,
 				CD97F10D2947705100A22734 /* CustomTabbarView.swift */,
+				CD97F10F294E22F700A22734 /* TimeView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		CD97F1112950BE3F00A22734 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				CDFB24452939EFC0005BAFA2 /* DataShelter.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		CD97F1142950C1DA00A22734 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				CD8E46E52945B4D100BC7312 /* Color+Utils.swift */,
+				CD97F1122950C0FA00A22734 /* NotificationName.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		CDCA0C23293B7AD90095D1FC /* ScaleView */ = {
@@ -495,12 +517,14 @@
 				CDCA0C0F293B7A030095D1FC /* TimeScaleView.swift in Sources */,
 				CD8E46E129446D1D00BC7312 /* CircleLoaderView.swift in Sources */,
 				CD2A688E293B036C00D234E5 /* DataManager.swift in Sources */,
+				CD97F110294E22F700A22734 /* TimeView.swift in Sources */,
 				CDFB24462939EFC0005BAFA2 /* DataShelter.swift in Sources */,
 				CD97F10E2947705100A22734 /* CustomTabbarView.swift in Sources */,
+				CD97F1132950C0FA00A22734 /* NotificationName.swift in Sources */,
 				CDCA0C21293B7AA80095D1FC /* RingView.swift in Sources */,
 				CD5560CC28A2949E00846C8B /* AppDelegate.swift in Sources */,
 				CD2A6873293A0CA000D234E5 /* WebViewController.swift in Sources */,
-				CD8E46E62945B4D100BC7312 /* Utils.swift in Sources */,
+				CD8E46E62945B4D100BC7312 /* Color+Utils.swift in Sources */,
 				CD8E46E42945A7C600BC7312 /* TimeLabelView.swift in Sources */,
 				CD367F1C293CC64D00F8094D /* CircularRingView.swift in Sources */,
 				CDCA0C15293B7A3D0095D1FC /* TrackRunView.swift in Sources */,

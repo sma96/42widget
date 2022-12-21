@@ -30,7 +30,6 @@ struct ScaleRingView: View {
                 .foregroundColor(.white.opacity(0.21))
             RingShape(currentPercentage: percentage, thickness: thickness)
                 .foregroundColor(.white.opacity(0.65))
-
         }
     }
 }

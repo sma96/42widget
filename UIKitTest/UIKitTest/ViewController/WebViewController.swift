@@ -15,11 +15,10 @@ class WebViewController: UIViewController {
         print("@@@@@@@@@@@@@@@@@@@@webviewcontroller deinit@@@@@@@@@@@@@@@@@@@")
     }
     
-    var firstFlag: Int = 0
+    var isFirstPageLoaded: Bool = false
     var webView: WKWebView!
     let circleLoader = CircleLoaderView()
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -36,7 +35,7 @@ class WebViewController: UIViewController {
         
         let request = URLRequest(url: components.url!)
 
-        circleLoader.start()
+        circleLoader.startAnimation()
         webView.load(request)
     }
 }
@@ -85,9 +84,9 @@ extension WebViewController: WKUIDelegate, WKNavigationDelegate {
     
     //MARK: - webView가 페이지 로드를 완료하면 호출되는 함수입니다. 만약 url이 "https://24hoursarenotenough.42seoul.kr/" 이라면 쿠키에 저장되어 있는 토큰을 가져와 누적 시간을 fetch 해옵니다.
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if firstFlag == 0 {
-            circleLoader.stop()
-            firstFlag = 1
+        if !isFirstPageLoaded {
+            circleLoader.stopAnimation()
+            isFirstPageLoaded = true
         }
         print("didFinish navigatio                                          \(webView.url) ")
         guard let url = webView.url?.absoluteString else {
@@ -99,10 +98,10 @@ extension WebViewController: WKUIDelegate, WKNavigationDelegate {
             webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
                 for cookie in cookies {
                     print(cookie)
-                    if cookie.name == DataShelter.shared.keyName {
+                    if cookie.name == DataShelter.shared.userDefaultTokenKeyName {
 
                         print(cookie.expiresDate)
-                        DataShelter.shared.expiresDate = cookie.expiresDate
+                        DataShelter.shared.tokenExpiresDate = cookie.expiresDate
                         DataShelter.shared.token = cookie.value
                         
                         DataShelter.shared.fetchAllData { [weak self] in
@@ -110,76 +109,28 @@ extension WebViewController: WKUIDelegate, WKNavigationDelegate {
                                 return
                             }
                             
-                            //MARK: - webview 쿠키 및 data 삭제 로직
-//                            let websiteDataTypes = NSSet(array: [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache, WKWebsiteDataTypeCookies])
-//                            let date = NSDate(timeIntervalSince1970: 0)
-//
-//                            WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes as! Set, modifiedSince: date as Date, completionHandler:{ })
-//                            print("delete cache data")
-//
-//                            WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), completionHandler: {
-//                                (records) -> Void in
-//                                for record in records{
-//                                    WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-//                                    print("delete cache data")
-//                                }
-//                            })
-////
+//                            MARK: - webview 쿠키 및 data 삭제 로직
+                            let websiteDataTypes = NSSet(array: [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache, WKWebsiteDataTypeCookies])
+                            let date = NSDate(timeIntervalSince1970: 0)
+
+                            WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes as! Set, modifiedSince: date as Date, completionHandler:{ })
+                            print("delete cache data")
+
+                            WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), completionHandler: {
+                                (records) -> Void in
+                                for record in records{
+                                    WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+                                    print("delete cache data")
+                                }
+                            })
+
                             self.webView.removeFromSuperview()
                             NotificationCenter.default.post(name: .fetched, object: nil)
                             self.dismiss(animated: true)
                         }
-                        
-//                        group.notify(queue: .main) {
-//                            let websiteDataTypes = NSSet(array: [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache, WKWebsiteDataTypeCookies])
-//                            let date = NSDate(timeIntervalSince1970: 0)
-//
-//                            WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes as! Set, modifiedSince: date as Date, completionHandler:{ })
-//                            print("delete cache data")
-//
-//                            WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), completionHandler: {
-//                                (records) -> Void in
-//                                for record in records{
-//                                    WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-//                                    print("delete cache data")
-//                                }
-//                            })
-//
-//                            self.webView.removeFromSuperview()
-//                            NotificationCenter.default.post(name: .fetched, object: nil)
-//                            self.dismiss(animated: true)
-//                        }
                     }
                 }
             }
         }
     }
 }
-
-//    func getHTML(_ completion: @escaping ([String: String]) -> ()) {
-//        webView.evaluateJavaScript("document.getElementsByTagName('pre')[0].innerHTML") { (html, error) in
-//            guard var data = html as? String else {
-//                print("erorror")
-//                return
-//            }
-//            print(data)
-//            data.removeAll { char in
-//                if "{}\"".contains(char)  {
-//                    return true
-//                } else {
-//                    return false
-//                }
-//            }
-//            if data.isEmpty {
-//                print("empty string")
-//                return
-//            } else {
-//                let parsedData = data.split(separator: ":")
-//                if parsedData[0] == "accessToken" {
-//                    let token: [String: String] = [String(parsedData[0]): String(parsedData[1])]
-//                    completion(token)
-//                }
-//            }
-//        }
-//    }
-//
